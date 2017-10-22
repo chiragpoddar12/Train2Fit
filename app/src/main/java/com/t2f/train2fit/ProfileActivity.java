@@ -16,16 +16,15 @@ import android.view.MenuItem;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-public class MainActivity extends AppCompatActivity
+public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -103,17 +102,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /** Called when the user taps the Login Button */
     public void onLoginClick(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
         String message = "From main activity to Login Activity";
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
-    }
-
-    public void onProfileClick(View view) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        String message = "From main activity to Profile Activity";
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
