@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -107,6 +107,14 @@ public class MainActivity extends AppCompatActivity
     public void onLoginClick(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
         String message = "From main activity to Login Activity";
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
+
+    /** Called when the user taps the Login Button */
+    public void onBookAppointmentClick(View view) {
+        Intent intent = new Intent(this, BookAppointmentActivity.class);
+        String message = "From main activity to Book Appointment Activity";
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
