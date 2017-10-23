@@ -40,4 +40,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0" />
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Feedback"
+        android:onClick="onFeedbackClick"
+        app:layout_constraintLeft_toLeftOf="@+id/button2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="-1dp"
+        android:layout_marginBottom="117dp" />
+
 </android.support.constraint.ConstraintLayout>

@@ -23,4 +23,5 @@
         completions."
     </string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_feedback">feedbackActivity</string>
 </resources>
