@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Train2Fit</string>
 
+    <string name="btn_logout_from_google">Logout from Google</string>
+    <string name="btn_revoke_access">Revoke Access</string>
+    <string name="loading">Loading...</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -26,4 +30,6 @@
     <string name="title_activity_feedback">feedbackActivity</string>
     <string name="facebook_app_id">752483264936674</string>
     <string name="fb_login_protocol_scheme">fb752483264936674</string>
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
 </resources>

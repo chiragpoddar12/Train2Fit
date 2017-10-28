@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -18,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,6 +37,15 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +55,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>,View.OnClickListener, GoogleApiClient.OnConnectionFailedListener{
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -68,6 +79,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int RC_SIGN_IN = 420;
+    private GoogleApiClient mGoogleApiClient;
+    private ProgressDialog mProgressDialog;
+
+    private SignInButton btnSignIn;
+    private Button btnSignOut;
+//    private LinearLayout llProfileLayout;
+//    private ImageView imgProfilePic;
+//    private TextView txtName, txtEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +97,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //FB Login
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
-        initializeControls();
+        initializeControlsFB();
         loginWithFB();
 
+        //Google Login
+        initializeControlsGoogle();
+        initializeGPlusSettings();
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -112,7 +136,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     LoginButton login_button;
     TextView txtStatus;
     CallbackManager callbackManager;
-    private void initializeControls(){
+    private void initializeControlsFB(){
         callbackManager = CallbackManager.Factory.create();
         txtStatus = (TextView)findViewById(R.id.txtStatus);
         login_button = (LoginButton)findViewById(R.id.login_button);
@@ -138,11 +162,116 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
     }
 
+    //Google Sign In Task
+
+    private void initializeControlsGoogle(){
+        btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
+        btnSignOut = (Button) findViewById(R.id.btn_sign_out);
+//        llProfileLayout = (LinearLayout) findViewById(R.id.email_login_form);
+//        imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
+//        txtName = (TextView) findViewById(R.id.txtName);
+//        txtEmail = (TextView) findViewById(R.id.txtEmail);
+
+        btnSignIn.setOnClickListener(this);
+        btnSignOut.setOnClickListener(this);
+    }
+
+    private void initializeGPlusSettings(){
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        // Customizing G+ button
+        btnSignIn.setSize(SignInButton.SIZE_STANDARD);
+        btnSignIn.setScopes(gso.getScopeArray());
+    }
+
+
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+        txtStatus.setText("Login Successful\n");
+    }
+
+
+    private void signOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        txtStatus.setText("Logout Successful\n");
+                        btnSignOut.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+//            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
+            updateUI(true);
+        } else {
+            // Signed out, show unauthenticated UI.
+            updateUI(false);
+        }
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.sign_in_button:
+                signIn();
+                break;
+            case R.id.btn_sign_out:
+                signOut();
+                break;
+        }
+    }
+
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+
+
+    private void updateUI(boolean isSignedIn) {
+        if (isSignedIn) {
+            btnSignIn.setVisibility(View.GONE);
+            btnSignOut.setVisibility(View.VISIBLE);
+            mLoginFormView.setVisibility(View.VISIBLE);
+        } else {
+            btnSignIn.setVisibility(View.VISIBLE);
+            btnSignOut.setVisibility(View.GONE);
+            mLoginFormView.setVisibility(View.GONE);
+        }
+    }
+
+    // Google Sign in End
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
     }
+
 
 
     private void populateAutoComplete() {
@@ -330,6 +459,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
+
 
 
     private interface ProfileQuery {
