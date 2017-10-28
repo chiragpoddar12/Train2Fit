@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
+
     /** Called when the user taps the Login Button */
     public void onLoginClick(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
