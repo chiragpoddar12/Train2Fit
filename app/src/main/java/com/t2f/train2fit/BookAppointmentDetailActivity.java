@@ -37,13 +37,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class BookAppointmentDetailActivity extends AppCompatActivity {
 
     static EditText DateEdit;
-
+    static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.US);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,10 +111,17 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
             DateEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Bundle bundle = new Bundle();
                     DialogFragment timeFragment = new TimePickerFragment();
-                    timeFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
                     DialogFragment dateFragment = new DatePickerFragment();
+                    if (DateEdit.getText().toString() != ""){
+                        bundle.putString("dateAsText",DateEdit.getText().toString());
+                        timeFragment.setArguments(bundle);
+                        dateFragment.setArguments(bundle);
+                    }
+                    timeFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
                     dateFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+
                 }
             });
 
@@ -145,11 +155,13 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
 
+            Bundle bundle = getArguments();
+            final Calendar calendar = getDateFromBundle(bundle);
+
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
@@ -166,9 +178,11 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
+            Bundle bundle = getArguments();
+            final Calendar calendar = getDateFromBundle(bundle);
+
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
 
             // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute,
@@ -177,7 +191,25 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // Do something with the time chosen by the user
-            DateEdit.setText(DateEdit.getText() + " -" + hourOfDay + ":" + minute);
+            DateEdit.setText(DateEdit.getText() + " - " + hourOfDay + ":" + minute);
         }
+    }
+
+    public static Calendar getDateFromBundle(Bundle bundle){
+        String dateString = bundle.getString("dateAsText");
+        Date date = new Date();
+        final Calendar calendar;
+        if(dateString.toString() != "") {
+            try {
+                date = simpleDateFormat.parse(dateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar = Calendar.getInstance();
+            calendar.setTime(date);
+        } else  {
+            calendar = Calendar.getInstance();
+        }
+        return calendar;
     }
 }
