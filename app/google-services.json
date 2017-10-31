@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "33246288958",
+    "project_id": "firebase-train2fit"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33246288958:android:711c9a79c8ed89f2",
+        "android_client_info": {
+          "package_name": "com.t2f.train2fit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "33246288958-nv2qg9ca0redgfqd8p9fta2rccsj87qv.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "33246288958-c4b5fi9s07s55ucsk4i8qlgrdq59u272.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.t2f.train2fit",
+            "certificate_hash": "383790410e706d2ee2c5b0f7af394863d98423ca"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3dUqCRPVgoiB_eHTnm2fnsdO1G0ZJRoU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
