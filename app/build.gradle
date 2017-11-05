@@ -3,7 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.t2f.train2fit"
         minSdkVersion 14
@@ -21,18 +21,19 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.gms:play-services-auth:9.0.0'
-    compile 'com.facebook.android:facebook-login:[4,5)'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    compile 'com.google.android.gms:play-services-auth:9.0.0'
+    compile 'com.facebook.android:facebook-login:[4,5)'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android.gms:play-services-maps:9.0.0'
     compile 'com.google.android.gms:play-services-location:9.0.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
-
 }
