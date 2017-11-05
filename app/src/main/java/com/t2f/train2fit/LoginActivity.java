@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 /**
  * A login screen that offers login via email/password.
@@ -86,9 +87,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private SignInButton btnSignIn;
     private Button btnSignOut;
-//    private LinearLayout llProfileLayout;
-//    private ImageView imgProfilePic;
-//    private TextView txtName, txtEmail;
+    private Button btnRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +128,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        btnRegister = (Button) findViewById(R.id.email_sign_up_button);
 
+
+    }
+
+    public void onRegisterClick(View view){
+        Intent intent = new Intent(this, RegisterActivity.class);
+        String message = "From Login Activity to Register Activity";
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 
     //Facebook initialize function
@@ -146,7 +154,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                txtStatus.setText("Login Successful\n");
+                txtStatus.setText("Login Successful\n" );
+                Intent Bintent = new Intent(LoginActivity.this,ProfileActivity.class);
+                String message = "From Login Activity to Profile Activity";
+                Bintent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(Bintent);
             }
 
             @Override
@@ -529,6 +541,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+
     }
+
 }
 
