@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-            Intent bookingIntent=new Intent(MainActivity.this, BookingActivity.class);
+            Intent bookingIntent=new Intent(MainActivity.this, AppointmentsActivity.class);
             startActivity(bookingIntent);
         } else if (id == R.id.nav_gallery) {
 

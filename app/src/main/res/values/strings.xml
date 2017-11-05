@@ -36,6 +36,6 @@
     <string name="title_activity_feedback">feedbackActivity</string>
     <string name="facebook_app_id">752483264936674</string>
     <string name="fb_login_protocol_scheme">fb752483264936674</string>
-    <item name="visible" type="id"/>
-    <item name="masked" type="id"/>
+    <item name="visible" type="id" />
+    <item name="masked" type="id" />
 </resources>

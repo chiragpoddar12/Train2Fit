@@ -85,6 +85,8 @@ public class ProfileActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            Intent bookingIntent=new Intent(ProfileActivity.this, BookingActivity.class);
+            startActivity(bookingIntent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
