@@ -2,9 +2,6 @@ package com.t2f.train2fit;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
@@ -110,6 +108,7 @@ public class MainActivity extends AppCompatActivity
     /** Called when the user taps the Login Button */
     public void onLoginClick(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
+
         String message = "From main activity to Login Activity";
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
