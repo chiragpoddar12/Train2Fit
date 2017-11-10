@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1090921372478-jvvd86353td2a3s0dnv0jdei49oqh35l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.t2f.train2fit",
+            "certificate_hash": "3995015d2e19c3eb5f7bfc58b231fac27bbb9bdf"
+          }
+        },
+        {
           "client_id": "1090921372478-9nrt16c4c91j3o924f81bbdij3n2fniq.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090921372478-9nrt16c4c91j3o924f81bbdij3n2fniq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
