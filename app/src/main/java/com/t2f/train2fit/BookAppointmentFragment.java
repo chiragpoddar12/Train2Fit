@@ -27,6 +27,7 @@ public class BookAppointmentFragment extends Fragment {
     private ArrayAdapter<String> mBookAppointmentAdapter;
     private ListView listView;
     private ArrayList<String> mTrainerTypes = new ArrayList<>();
+    private ArrayList<String> mKeys = new ArrayList<>();
 
     public BookAppointmentFragment() {
     }
@@ -79,12 +80,19 @@ public class BookAppointmentFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String value = dataSnapshot.getValue(String.class);
                 mTrainerTypes.add(value);
+                mKeys.add(dataSnapshot.getKey());
 
                 mBookAppointmentAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String value = dataSnapshot.getValue(String.class);
+                String key = dataSnapshot.getKey();
+
+                int index = mKeys.indexOf(key);
+                mTrainerTypes.set(index, value);
+                mBookAppointmentAdapter.notifyDataSetChanged();
 
             }
 
