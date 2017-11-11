@@ -9,15 +9,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
@@ -27,6 +36,12 @@ public class ProfileActivity extends AppCompatActivity
     private Button signOut;
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
+    private DatabaseReference mDatabase;
+    private TextView tvName;
+    private TextView tvAddress;
+    private TextView tvEmail;
+    private TextView tvDateOfBirth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +49,11 @@ public class ProfileActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         signOut = (Button) findViewById(R.id.sign_out);
+        tvName = (TextView) findViewById(R.id.textViewName);
+        tvAddress = (TextView) findViewById(R.id.textViewAddress);
+        tvEmail = (TextView) findViewById(R.id.textViewEmail);
+        tvDateOfBirth = (TextView) findViewById(R.id.textViewDateOfBirth);
+
 
 
         //get firebase auth instance
@@ -42,6 +62,35 @@ public class ProfileActivity extends AppCompatActivity
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        String userId = "sfosniocnoi6868161";  //retrieve from session
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                String value = dataSnapshot.getValue(String.class);
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                Object firstName = map.get("First_Name");
+                Object lastName = map.get("Last_Name");
+                Map<String, Object> address = (Map) map.get("Address");
+                Object dateOfBirth = map.get("date_of_birth");
+                Object email = map.get("email");
+
+                tvName.setText(firstName.toString()+" "+lastName.toString());
+//                Log.v("E_VALUE", "Data: "+address.get("address2"));
+                tvAddress.setText(address.get("address1")+", "+address.get("address2")+", "+address.get("address3"));
+                tvDateOfBirth.setText(dateOfBirth.toString());
+                tvEmail.setText(email.toString());
+
+
+//                Log.v("E_VALUE", "Data: "+address.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
