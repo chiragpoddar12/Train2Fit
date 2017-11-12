@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -37,15 +38,29 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class BookAppointmentDetailActivity extends AppCompatActivity {
 
-    static EditText DateEdit;
+
+    private static EditText DateEdit;
+    private TextView detail_text;
+    private EditText appointment_date;
+    private EditText appointment_notes;
+    private static DatabaseReference mDatabase;
     static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.US);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +105,10 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
      * A placeholder fragment containing a simple view.
      */
     public static class DetailFragment extends Fragment {
-
+        private TextView detail_text;
+        private EditText appointment_date;
+        private EditText appointment_notes;
+        DatabaseReference mDatabase;
         public DetailFragment() {
         }
 
@@ -98,7 +116,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
         // The detail Activity called via intent.  Inspect the intent for appointment data.
             Intent intent = getActivity().getIntent();
@@ -134,14 +152,35 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
 
             DateEdit.setText(day + "/" + (month + 1) + "/" + year + " -" + hour + ":" + minute);
 
+
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
             Button book_appointment_button = (Button) rootView.findViewById(R.id.book_appointment_button);
             book_appointment_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v)  {
-                    Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful" , Toast.LENGTH_LONG ).show();
-//                    getActivity().finish();
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    String trainerType = ((TextView) rootView.findViewById(R.id.detail_text)).getText().toString().split("You Selected")[1];
+                    String date_time = ((EditText) rootView.findViewById(R.id.appointment_date)).getText().toString();
+                    String notes = ((EditText) rootView.findViewById(R.id.appointment_notes)).getText().toString();
+                    Map<String, String> booking = new HashMap();
+                    booking.put("trainerType", trainerType);
+                    booking.put("dateTime", date_time);
+                    booking.put("notes", notes);
+                    booking.put("user", "USERNAME");
+                    mDatabase.push().setValue(booking).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(@NonNull Void T) {
+                            Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful" , Toast.LENGTH_LONG ).show();
+//                          getActivity().finish();
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity().getBaseContext(), "Error : Your Appointment booking is Unsuccessful" , Toast.LENGTH_LONG ).show();
+                        }
+                    });
+
                 }
             });
 
