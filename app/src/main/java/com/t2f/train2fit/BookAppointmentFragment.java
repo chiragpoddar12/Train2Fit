@@ -13,12 +13,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 
 public class BookAppointmentFragment extends Fragment {
-
+    private DatabaseReference mDatabase;
     private ArrayAdapter<String> mBookAppointmentAdapter;
+    private ListView listView;
+    private ArrayList<String> mTrainerTypes = new ArrayList<>();
+    private ArrayList<String> mKeys = new ArrayList<>();
 
     public BookAppointmentFragment() {
     }
@@ -56,24 +65,61 @@ public class BookAppointmentFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragement_book_appointment, container, false);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Trainer Type");
+        listView = (ListView) rootView.findViewById(R.id.listview_appointments);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_appointments);
-        final ArrayList<String> list = new ArrayList<String>();
-        String[] values = new String[] { "Holistic Personal Trainer", "Athletic Trainers", "Rehabilitation Specialist Trainer",
-                "Yoga Trainer", "Weight Loss Trainers", "Weight Maintenance Trainers", "Physical Recovery Trainers", "Physical Recovery Trainers",
-                "Sports Trainers", "Dance Trainers"};
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
-        }
         mBookAppointmentAdapter =
                 new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)
                         R.layout.list_item_appointments, // The name of the layout ID.
                         R.id.list_item_appointments_textview, // The ID of the textview to populate.
-                        list);
+                        mTrainerTypes);
 
+        mDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String value = dataSnapshot.getValue(String.class);
+                mTrainerTypes.add(value);
+                mKeys.add(dataSnapshot.getKey());
+
+                mBookAppointmentAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String value = dataSnapshot.getValue(String.class);
+                String key = dataSnapshot.getKey();
+
+                int index = mKeys.indexOf(key);
+                mTrainerTypes.set(index, value);
+                mBookAppointmentAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+//        final ArrayList<String> list = new ArrayList<String>();
+//        String[] values = new String[] { "Holistic Personal Trainer", "Athletic Trainers", "Rehabilitation Specialist Trainer",
+//                "Yoga Trainer", "Weight Loss Trainers", "Weight Maintenance Trainers", "Physical Recovery Trainers", "Physical Recovery Trainers",
+//                "Sports Trainers", "Dance Trainers"};
+//        for (int i = 0; i < values.length; ++i) {
+//            list.add(values[i]);
+//        }
         listView.setAdapter(mBookAppointmentAdapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
