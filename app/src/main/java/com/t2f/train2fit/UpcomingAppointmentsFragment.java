@@ -11,7 +11,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 
 /**
@@ -20,9 +27,11 @@ import java.util.ArrayList;
 public class UpcomingAppointmentsFragment extends Fragment {
 
     ListView listView;
+    private DatabaseReference mDatabase;
 
-    final ArrayList<String> list = new ArrayList<String>();
     private ArrayAdapter<String> mBookAppointmentAdapter;
+    final ArrayList<String> UpcomingAppointmentList = new ArrayList<String>();
+    private ArrayList<String> mKeys = new ArrayList<>();
 
     public UpcomingAppointmentsFragment() {
         // Required empty public constructor
@@ -36,26 +45,70 @@ public class UpcomingAppointmentsFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_upcoming_appointments, container, false);
         listView = (ListView) v.findViewById(R.id.lvupcomingAppointments);
 
-        final String[] values = new String[] { "Holistic Personal Trainer", "Athletic Trainers", "Rehabilitation Specialist Trainer",
-                "Yoga Trainer", "Weight Loss Trainers", "Weight Maintenance Trainers", "Physical Recovery Trainers", "Physical Recovery Trainers",
-                "Sports Trainers", "Dance Trainers"};
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
-        }
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
 
         mBookAppointmentAdapter =
                 new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)
                         R.layout.list_item_appointments, // The name of the layout ID.
                         R.id.list_item_appointments_textview, // The ID of the textview to populate.
-                        list);
+                        UpcomingAppointmentList);
+
+        mDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                Object trainer = map.get("trainerType");
+                Object dateTime = map.get("dateTime");
+                Object notes = map.get("notes");
+                Object user = map.get("user");
+
+                String trainerString = "Booked " + trainer.toString() + "\nDate: " + dateTime.toString() + "\nNotes: " + notes.toString();
+                UpcomingAppointmentList.add(trainerString);
+                mKeys.add(dataSnapshot.getKey());
+
+                mBookAppointmentAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                Object trainer = map.get("trainerType");
+                Object dateTime = map.get("dateTime");
+                Object notes = map.get("notes");
+                Object user = map.get("user");
+
+                String key = dataSnapshot.getKey();
+                int index = mKeys.indexOf(key);
+                UpcomingAppointmentList.set(index, trainer.toString());
+                mBookAppointmentAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         listView.setAdapter(mBookAppointmentAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                CharSequence selectedAppointment = mBookAppointmentAdapter.getItem(position);
                 Intent detailsIntent = new Intent(getContext(),AppointmentDetailActivity.class);
-                detailsIntent.putExtra("TYPE",values[i]);
+                detailsIntent.putExtra("TYPE",selectedAppointment);
                 startActivity(detailsIntent);
             }
         });

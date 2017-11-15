@@ -61,7 +61,8 @@ public class ProfileActivity extends AppCompatActivity
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        String userId = user.getUid();  //retrieve from session
+//        String userId = user.getUid();  //retrieve from session
+        String userId = "sfosniocnoi6868161";  //retrieve from session
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
 
         mDatabase.addValueEventListener(new ValueEventListener() {
