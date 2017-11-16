@@ -37,7 +37,11 @@
     <string name="title_activity_profile">Firebase</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_dob">DOB</string>
+    <string name="hint_mobile">Mobile</string>
     <string name="hint_name">Fullname</string>
+    <string name="hint_address">Address</string>
+
     <string name="btn_login">LOGIN</string>
     <string name="btn_link_to_register">Register here if not a member !</string>
     <string name="btn_link_to_login">Already a Member ?</string>
