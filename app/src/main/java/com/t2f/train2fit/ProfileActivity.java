@@ -40,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity
     private TextView tvAddress;
     private TextView tvEmail;
     private TextView tvDateOfBirth;
+    public String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,29 +62,14 @@ public class ProfileActivity extends AppCompatActivity
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-//        String userId = user.getUid();  //retrieve from session
-        String userId = "sfosniocnoi6868161";  //retrieve from session
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+        userId = user.getUid();//retrieve from session
+//        String userId = "sfosniocnoi6868161";
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                String value = dataSnapshot.getValue(String.class);
-                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                Object firstName = map.get("First_Name");
-                Object lastName = map.get("Last_Name");
-                Map<String, Object> address = (Map) map.get("Address");
-                Object dateOfBirth = map.get("date_of_birth");
-                Object email = map.get("email");
-
-                tvName.setText(firstName.toString()+" "+lastName.toString());
-//                Log.v("E_VALUE", "Data: "+address.get("address2"));
-                tvAddress.setText(address.get("address1")+", "+address.get("address2")+", "+address.get("address3"));
-                tvDateOfBirth.setText(dateOfBirth.toString());
-                tvEmail.setText(email.toString());
-
-
-//                Log.v("E_VALUE", "Data: "+address.toString());
+                setDataOnScreen(dataSnapshot);
             }
 
             @Override
@@ -136,6 +122,41 @@ public class ProfileActivity extends AppCompatActivity
         LoginManager.getInstance().logOut();
         Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    public void setDataOnScreen(DataSnapshot dataSnapshot){
+        Map<String, Object> users = (Map<String, Object>) dataSnapshot.getValue();
+        for(Map.Entry<String, Object> currentUser : users.entrySet()){
+            Map<String, Object> userValue = (Map<String, Object>) currentUser.getValue();
+            for(Map.Entry<String, Object> currentUserEntity : userValue.entrySet()){
+                System.out.println(currentUserEntity.getValue());
+                String userKey = currentUserEntity.getValue().toString();
+                if(userKey.equals(userId)){
+                    String userDbKey = currentUser.getKey();
+                    DatabaseReference mDatabaseUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userDbKey);
+                    mDatabaseUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map<String, Object> userInfos = (Map<String, Object>) dataSnapshot.getValue();
+                            for(Map.Entry<String, Object> userInfo : userInfos.entrySet()){
+                                switch (userInfo.getKey()){
+                                    case "address": tvAddress.setText(userInfo.getValue().toString());break;
+                                    case "first_name": tvName.setText(userInfo.getValue().toString()); break;
+                                    case "dob" :  tvDateOfBirth.setText(userInfo.getValue().toString()); break;
+                                    case "email": tvEmail.setText(userInfo.getValue().toString()); break;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    break;
+                }
+            }
+        }
     }
 
     @Override

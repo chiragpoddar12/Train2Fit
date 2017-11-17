@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,15 +13,23 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword,inputDOB, inputMobile, inputAddress;
     private Button btnSignIn, btnSignUp, btnResetPassword;
     private ProgressBar progressBar;
+    private DatabaseReference mDatabase;
     private FirebaseAuth auth;
 
     @Override
@@ -102,6 +111,7 @@ public class SignupActivity extends AppCompatActivity {
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                System.out.println("HELLO");
                                 Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                                 // If sign in fails, display a message to the user. If sign in succeeds
@@ -111,11 +121,52 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                                    finish();
+                                    Log.i("Testing", "User");
+                                    System.out.println("line 1");
+                                    //Firebase DB Reference
+                                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+                                    Log.i("Testing", "User");
+                                    System.out.println("line 2");
+                                    String userId = task.getResult().getUser().getUid();
+                                    String display_name = task.getResult().getUser().getDisplayName();
+                                    String first_name = "csbkjsd";
+                                    String last_name = "sbdvksbkjvbs";
+                                    String dob = "12/12/1993";
+                                    Map<String, String> address = new HashMap<String, String>();
+                                    address.put("address1", "jbsvjkbvkjbdkj");
+                                    address.put("address2", "clsdbvubuvs");
+                                    address.put("address3", "ksbvowbevoiwb");
+                                    address.put("city", "sdbvsbvjs");
+                                    address.put("country", "sbvwbiwiueuf");
+                                    address.put("house", "61");
+                                    address.put("apartment", "16");
+
+                                    Map<String, Object> userMap = new HashMap<String, Object>();
+                                    userMap.put("first_name", first_name);
+                                    userMap.put("last_name", last_name);
+                                    userMap.put("userId", userId);
+                                    userMap.put("dob", dob);
+                                    userMap.put("address", address);
+                                    System.out.println(userMap);
+//                                    User user = new User(userId, display_name, first_name, last_name, dob, address);
+                                    mDatabase.push().setValue(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(@NonNull Void T) {
+                                            Toast.makeText(getApplicationContext(), "Success: User registration is successful" , Toast.LENGTH_LONG ).show();
+                                            startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getApplicationContext(), "Error : User registration is Unsuccessful" , Toast.LENGTH_LONG ).show();
+                                        }
+                                    });
+
                                 }
                             }
                         });
+
 
             }
         });

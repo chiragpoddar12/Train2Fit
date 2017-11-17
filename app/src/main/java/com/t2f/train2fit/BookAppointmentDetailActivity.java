@@ -40,6 +40,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -61,6 +63,8 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
     private EditText appointment_date;
     private EditText appointment_notes;
     private static DatabaseReference mDatabase;
+    private static FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authListener;
     static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.US);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +161,14 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
             Button book_appointment_button = (Button) rootView.findViewById(R.id.book_appointment_button);
             book_appointment_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v)  {
+                    //get firebase auth instance
+                    auth = FirebaseAuth.getInstance();
+
+                    //get current user
+                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    String userId = user.getUid();
+//                    String userId = user.getUid(); //retrieve from session
                     String trainerType = ((TextView) rootView.findViewById(R.id.detail_text)).getText().toString().split("You Selected")[1];
                     String date_time = ((EditText) rootView.findViewById(R.id.appointment_date)).getText().toString();
                     String notes = ((EditText) rootView.findViewById(R.id.appointment_notes)).getText().toString();
@@ -164,7 +176,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                     booking.put("trainerType", trainerType);
                     booking.put("dateTime", date_time);
                     booking.put("notes", notes);
-                    booking.put("user", "USERNAME");
+                    booking.put("user", userId);
                     mDatabase.push().setValue(booking).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(@NonNull Void T) {
