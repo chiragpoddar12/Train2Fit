@@ -145,7 +145,7 @@ public class ProfileActivity extends AppCompatActivity
                                     case "address": tvAddress.setText(userInfo.getValue().toString());break;
                                     case "full_name": tvName.setText(userInfo.getValue().toString()); break;
                                     case "dob" :  tvDateOfBirth.setText(userInfo.getValue().toString()); break;
-                                    case "email": tvEmail.setText(userInfo.getValue().toString()); break;
+                                    case "email": tvEmail.setText(userInfo.getValue().toString());break;
                                     case "mobile" : tvMobile.setText(userInfo.getValue().toString()); break;
                                 }
                             }

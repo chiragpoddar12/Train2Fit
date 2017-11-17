@@ -135,12 +135,14 @@ public class SignupActivity extends AppCompatActivity {
                                     String dob = inputDOB.getText().toString();
                                     String address = inputAddress.getText().toString();
                                     String mobile = inputMobile.getText().toString();
+                                    String email = inputEmail.getText().toString();
                                     Map<String, Object> userMap = new HashMap<String, Object>();
                                     userMap.put("full_name", fullName);
                                     userMap.put("userId", userId);
                                     userMap.put("dob", dob);
                                     userMap.put("address", address);
                                     userMap.put("mobile", mobile);
+                                    userMap.put("email", email);
 
 //                                    System.out.println(userMap);
 //                                    User user = new User(userId, display_name, first_name, last_name, dob, address);
