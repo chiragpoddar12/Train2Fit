@@ -40,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity
     private TextView tvAddress;
     private TextView tvEmail;
     private TextView tvDateOfBirth;
+    private TextView tvMobile;
     public String userId;
 
     @Override
@@ -53,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity
         tvAddress = (TextView) findViewById(R.id.textViewAddress);
         tvEmail = (TextView) findViewById(R.id.textViewEmail);
         tvDateOfBirth = (TextView) findViewById(R.id.textViewDateOfBirth);
+        tvMobile = (TextView) findViewById(R.id.textViewMobile);
 
 
 
@@ -141,9 +143,10 @@ public class ProfileActivity extends AppCompatActivity
                             for(Map.Entry<String, Object> userInfo : userInfos.entrySet()){
                                 switch (userInfo.getKey()){
                                     case "address": tvAddress.setText(userInfo.getValue().toString());break;
-                                    case "first_name": tvName.setText(userInfo.getValue().toString()); break;
+                                    case "full_name": tvName.setText(userInfo.getValue().toString()); break;
                                     case "dob" :  tvDateOfBirth.setText(userInfo.getValue().toString()); break;
                                     case "email": tvEmail.setText(userInfo.getValue().toString()); break;
+                                    case "mobile" : tvMobile.setText(userInfo.getValue().toString()); break;
                                 }
                             }
                         }

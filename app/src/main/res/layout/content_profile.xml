@@ -63,6 +63,16 @@
             android:textSize="10sp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
+        <TextView
+            android:id="@+id/textViewMobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewDateOfBirth"
+            android:layout_centerHorizontal="true"
+            android:text="Mobile Number"
+            android:textSize="10sp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <Button
             android:id="@+id/sign_out"

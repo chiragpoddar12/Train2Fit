@@ -49,9 +49,11 @@ public class SignupActivity extends AppCompatActivity {
         inputAddress = (EditText)findViewById(R.id.address);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
+        final EditText etFullName = (EditText) findViewById(R.id.fullName);
 
 
-        btnResetPassword.setOnClickListener(new View.OnClickListener() {
+
+                btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SignupActivity.this, ResetPasswordActivity.class));
@@ -129,25 +131,18 @@ public class SignupActivity extends AppCompatActivity {
                                     System.out.println("line 2");
                                     String userId = task.getResult().getUser().getUid();
                                     String display_name = task.getResult().getUser().getDisplayName();
-                                    String first_name = "csbkjsd";
-                                    String last_name = "sbdvksbkjvbs";
-                                    String dob = "12/12/1993";
-                                    Map<String, String> address = new HashMap<String, String>();
-                                    address.put("address1", "jbsvjkbvkjbdkj");
-                                    address.put("address2", "clsdbvubuvs");
-                                    address.put("address3", "ksbvowbevoiwb");
-                                    address.put("city", "sdbvsbvjs");
-                                    address.put("country", "sbvwbiwiueuf");
-                                    address.put("house", "61");
-                                    address.put("apartment", "16");
-
+                                    String fullName = etFullName.getText().toString();
+                                    String dob = inputDOB.getText().toString();
+                                    String address = inputAddress.getText().toString();
+                                    String mobile = inputMobile.getText().toString();
                                     Map<String, Object> userMap = new HashMap<String, Object>();
-                                    userMap.put("first_name", first_name);
-                                    userMap.put("last_name", last_name);
+                                    userMap.put("full_name", fullName);
                                     userMap.put("userId", userId);
                                     userMap.put("dob", dob);
                                     userMap.put("address", address);
-                                    System.out.println(userMap);
+                                    userMap.put("mobile", mobile);
+
+//                                    System.out.println(userMap);
 //                                    User user = new User(userId, display_name, first_name, last_name, dob, address);
                                     mDatabase.push().setValue(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
