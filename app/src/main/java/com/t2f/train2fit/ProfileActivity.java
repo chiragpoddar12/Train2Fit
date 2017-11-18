@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
@@ -54,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity
     private StorageReference mStorage;
     private static final int GALLERY_INTENT = 2;
     private ProgressDialog progressDialog;
+    private ImageView ivProfilePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,7 @@ public class ProfileActivity extends AppCompatActivity
         tvDateOfBirth = (TextView) findViewById(R.id.textViewDateOfBirth);
         tvMobile = (TextView) findViewById(R.id.textViewMobile);
         progressDialog = new ProgressDialog(this);
+        ivProfilePhoto = (ImageView) findViewById(R.id.ivProfilePhoto);
 
 
 
@@ -79,7 +84,7 @@ public class ProfileActivity extends AppCompatActivity
 
         userId = user.getUid();//retrieve from session
 //        String userId = "sfosniocnoi6868161";
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
 
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -152,39 +157,65 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     public void setDataOnScreen(DataSnapshot dataSnapshot){
-        Map<String, Object> users = (Map<String, Object>) dataSnapshot.getValue();
-        for(Map.Entry<String, Object> currentUser : users.entrySet()){
-            Map<String, Object> userValue = (Map<String, Object>) currentUser.getValue();
-            for(Map.Entry<String, Object> currentUserEntity : userValue.entrySet()){
-                System.out.println(currentUserEntity.getValue());
-                String userKey = currentUserEntity.getValue().toString();
-                if(userKey.equals(userId)){
-                    String userDbKey = currentUser.getKey();
-                    DatabaseReference mDatabaseUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userDbKey);
-                    mDatabaseUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Map<String, Object> userInfos = (Map<String, Object>) dataSnapshot.getValue();
-                            for(Map.Entry<String, Object> userInfo : userInfos.entrySet()){
-                                switch (userInfo.getKey()){
-                                    case "address": tvAddress.setText(userInfo.getValue().toString());break;
-                                    case "full_name": tvName.setText(userInfo.getValue().toString()); break;
-                                    case "dob" :  tvDateOfBirth.setText(userInfo.getValue().toString()); break;
-                                    case "email": tvEmail.setText(userInfo.getValue().toString());break;
-                                    case "mobile" : tvMobile.setText(userInfo.getValue().toString()); break;
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                    break;
-                }
+        progressDialog.show();
+        tvAddress.setText(mDatabase.child(userId).child("full_name").getKey());
+        Map<String, Object> userInfos = (Map<String, Object>) dataSnapshot.getValue();
+        for(Map.Entry<String, Object> userInfo : userInfos.entrySet()){
+            switch(userInfo.getKey()){
+                case "address": tvAddress.setText(userInfo.getValue().toString());break;
+                case "full_name": tvName.setText(userInfo.getValue().toString()); break;
+                case "dob" :  tvDateOfBirth.setText(userInfo.getValue().toString()); break;
+                case "email": tvEmail.setText(userInfo.getValue().toString());break;
+                case "mobile" : tvMobile.setText(userInfo.getValue().toString()); break;
+                case "profile_photo" :  Task<Uri> task = mStorage.child("profilePhotos").child(userId).getDownloadUrl();
+                                        task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
+                                                Picasso.with(getApplicationContext()).load(uri).into(ivProfilePhoto);
+                                                progressDialog.dismiss();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getApplicationContext(), "Problem getting profile picture", Toast.LENGTH_SHORT);
+                                                progressDialog.dismiss();
+                                            }
+                                        });
+                                        break;
             }
         }
+//        for(Map.Entry<String, Object> currentUser : users.entrySet()){
+//            Map<String, Object> userValue = (Map<String, Object>) currentUser.getValue();
+//            for(Map.Entry<String, Object> currentUserEntity : userValue.entrySet()){
+//                System.out.println(currentUserEntity.getValue());
+//                String userKey = currentUserEntity.getValue().toString();
+//                if(userKey.equals(userId)){
+//                    String userDbKey = currentUser.getKey();
+//                    DatabaseReference mDatabaseUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userDbKey);
+//                    mDatabaseUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            Map<String, Object> userInfos = (Map<String, Object>) dataSnapshot.getValue();
+//                            for(Map.Entry<String, Object> userInfo : userInfos.entrySet()){
+//                                switch (userInfo.getKey()){
+//                                    case "address": tvAddress.setText(userInfo.getValue().toString());break;
+//                                    case "full_name": tvName.setText(userInfo.getValue().toString()); break;
+//                                    case "dob" :  tvDateOfBirth.setText(userInfo.getValue().toString()); break;
+//                                    case "email": tvEmail.setText(userInfo.getValue().toString());break;
+//                                    case "mobile" : tvMobile.setText(userInfo.getValue().toString()); break;
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//                    break;
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -257,6 +288,7 @@ public class ProfileActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GALLERY_INTENT && resultCode==RESULT_OK){
+            progressDialog.setMessage("Uploading Image...");
             progressDialog.show();
             Uri uri = data.getData();
             StorageReference filepath = mStorage.child("profilePhotos").child(userId);
@@ -264,6 +296,10 @@ public class ProfileActivity extends AppCompatActivity
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     progressDialog.dismiss();
+                    Uri downloadUri = taskSnapshot.getDownloadUrl();
+
+                    mDatabase.child(userId).child("profile_photo").setValue(downloadUri);
+                    Picasso.with(getApplicationContext()).load(downloadUri).into(ivProfilePhoto);
                     Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG);
                 }
             }).addOnFailureListener(new OnFailureListener() {

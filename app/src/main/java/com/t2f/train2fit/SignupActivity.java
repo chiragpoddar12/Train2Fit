@@ -134,7 +134,7 @@ public class SignupActivity extends AppCompatActivity {
                                     String email = inputEmail.getText().toString();
                                     Map<String, Object> userMap = new HashMap<String, Object>();
                                     userMap.put("full_name", fullName);
-                                    userMap.put("userId", userId);
+//                                    userMap.put("userId", userId);
                                     userMap.put("dob", dob);
                                     userMap.put("address", address);
                                     userMap.put("mobile", mobile);
@@ -142,7 +142,9 @@ public class SignupActivity extends AppCompatActivity {
 
 //                                    System.out.println(userMap);
 //                                    User user = new User(userId, display_name, first_name, last_name, dob, address);
-                                    mDatabase.push().setValue(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    mDatabase.push().setValue(userMap).
+                                    mDatabase.child(userId).setValue(userMap)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(@NonNull Void T) {
                                             Toast.makeText(getApplicationContext(), "Success: User registration is successful" , Toast.LENGTH_LONG ).show();

@@ -15,9 +15,9 @@
         tools:layout_editor_absoluteX="8dp">
 
         <ImageView
-            android:id="@+id/imageViewTrainer"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:id="@+id/ivProfilePhoto"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
             app:srcCompat="@drawable/fitness"
             android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
@@ -27,7 +27,7 @@
             android:id="@+id/textViewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageViewTrainer"
+            android:layout_below="@+id/ivProfilePhoto"
             android:layout_centerHorizontal="true"
             android:text="John Neville"
             android:textSize="30sp"
