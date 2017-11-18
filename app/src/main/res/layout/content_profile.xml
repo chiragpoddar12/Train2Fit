@@ -18,7 +18,6 @@
             android:id="@+id/ivProfilePhoto"
             android:layout_width="300dp"
             android:layout_height="150dp"
-            app:srcCompat="@drawable/fitness"
             android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
             />
@@ -29,7 +28,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ivProfilePhoto"
             android:layout_centerHorizontal="true"
-            android:text="John Neville"
             android:textSize="30sp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
@@ -39,7 +37,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewName"
             android:layout_centerHorizontal="true"
-            android:text="Address"
             android:textSize="10sp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
@@ -49,7 +46,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewAddress"
             android:layout_centerHorizontal="true"
-            android:text="Email"
             android:textSize="10sp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
@@ -59,7 +55,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewEmail"
             android:layout_centerHorizontal="true"
-            android:text="Date of Birth"
             android:textSize="10sp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
@@ -69,7 +64,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textViewDateOfBirth"
             android:layout_centerHorizontal="true"
-            android:text="Mobile Number"
             android:textSize="10sp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
