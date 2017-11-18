@@ -1,5 +1,6 @@
 package com.t2f.train2fit;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ public class ProfileActivity extends AppCompatActivity
     private Button bSelectImage;
     private StorageReference mStorage;
     private static final int GALLERY_INTENT = 2;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class ProfileActivity extends AppCompatActivity
         tvEmail = (TextView) findViewById(R.id.textViewEmail);
         tvDateOfBirth = (TextView) findViewById(R.id.textViewDateOfBirth);
         tvMobile = (TextView) findViewById(R.id.textViewMobile);
+        progressDialog = new ProgressDialog(this);
 
 
 
@@ -254,16 +257,19 @@ public class ProfileActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GALLERY_INTENT && resultCode==RESULT_OK){
+            progressDialog.show();
             Uri uri = data.getData();
             StorageReference filepath = mStorage.child("profilePhotos").child(userId);
             filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Upload Failed", Toast.LENGTH_LONG);
                 }
             });
