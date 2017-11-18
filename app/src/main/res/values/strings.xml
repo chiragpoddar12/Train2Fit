@@ -57,5 +57,5 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">Enter your email. We will send you a link to reset password !</string>
     <string name="fullName">Full Name</string>
-    fullName
+    <string name="upload_image">Upload Image</string>
 </resources>

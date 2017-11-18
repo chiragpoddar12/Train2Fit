@@ -75,6 +75,16 @@
             tools:layout_editor_absoluteY="0dp" />
 
         <Button
+            android:id="@+id/bImageSelect"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/upload_image"
+            android:layout_below="@+id/textViewMobile"
+            android:textStyle="bold" />
+
+        <Button
             android:id="@+id/sign_out"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
