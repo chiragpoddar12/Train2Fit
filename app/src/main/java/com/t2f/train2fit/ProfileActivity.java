@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -43,7 +44,7 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Button signOut;
+    private FloatingActionButton signOut;
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
     private DatabaseReference mDatabase;
@@ -65,7 +66,7 @@ public class ProfileActivity extends AppCompatActivity
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        signOut = (Button) findViewById(R.id.sign_out);
+        signOut = (FloatingActionButton) findViewById(R.id.sign_out);
         tvName = (TextView) findViewById(R.id.textViewName);
         tvAddress = (TextView) findViewById(R.id.textViewAddress);
         tvEmail = (TextView) findViewById(R.id.textViewEmail);
@@ -73,7 +74,6 @@ public class ProfileActivity extends AppCompatActivity
         tvMobile = (TextView) findViewById(R.id.textViewMobile);
         progressDialog = new ProgressDialog(this);
         ivProfilePhoto = (ImageView) findViewById(R.id.ivProfilePhoto);
-
 
 
         //get firebase auth instance
@@ -97,10 +97,10 @@ public class ProfileActivity extends AppCompatActivity
 
             }
         });
-        bSelectImage = (Button) findViewById(R.id.bImageSelect);
+//        bSelectImage = (Button) findViewById(R.id.bImageSelect);
         mStorage = FirebaseStorage.getInstance().getReference();
 
-        bSelectImage.setOnClickListener(new View.OnClickListener() {
+        ivProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
