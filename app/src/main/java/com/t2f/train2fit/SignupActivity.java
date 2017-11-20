@@ -148,7 +148,7 @@ public class SignupActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(@NonNull Void T) {
                                             Toast.makeText(getApplicationContext(), "Success: User registration is successful" , Toast.LENGTH_LONG ).show();
-                                            startActivity(new Intent(SignupActivity.this, AppointmentsActivity.class));
+                                            startActivity(new Intent(SignupActivity.this, BookAppointmentActivity.class));
                                             finish();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
