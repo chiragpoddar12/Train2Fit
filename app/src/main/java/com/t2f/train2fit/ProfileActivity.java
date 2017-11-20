@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity
     private static final int GALLERY_INTENT = 2;
     private ProgressDialog progressDialog;
     private ImageView ivProfilePhoto;
+    private ImageView ivImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,10 @@ public class ProfileActivity extends AppCompatActivity
         progressDialog = new ProgressDialog(this);
         ivProfilePhoto = (ImageView) findViewById(R.id.ivProfilePhoto);
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView =  navigationView.inflateHeaderView(R.layout.nav_header_main);
+        ivImageView = (ImageView)hView.findViewById(R.id.imageView);
+
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -86,7 +93,7 @@ public class ProfileActivity extends AppCompatActivity
 //        String userId = "sfosniocnoi6868161";
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
 
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 setDataOnScreen(dataSnapshot);
@@ -97,6 +104,33 @@ public class ProfileActivity extends AppCompatActivity
 
             }
         });
+
+//        mDatabase.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                setDataOnScreen(dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//                setDataOnScreen(dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 //        bSelectImage = (Button) findViewById(R.id.bImageSelect);
         mStorage = FirebaseStorage.getInstance().getReference();
 
@@ -122,14 +156,14 @@ public class ProfileActivity extends AppCompatActivity
             }
         };
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        FloatingActionButton fbEditProfile = (FloatingActionButton) findViewById(R.id.editProfile);
+        fbEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -137,7 +171,7 @@ public class ProfileActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         signOut.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +192,6 @@ public class ProfileActivity extends AppCompatActivity
 
     public void setDataOnScreen(DataSnapshot dataSnapshot){
         progressDialog.show();
-        tvAddress.setText(mDatabase.child(userId).child("full_name").getKey());
         Map<String, Object> userInfos = (Map<String, Object>) dataSnapshot.getValue();
         for(Map.Entry<String, Object> userInfo : userInfos.entrySet()){
             switch(userInfo.getKey()){
@@ -172,6 +205,7 @@ public class ProfileActivity extends AppCompatActivity
                                             @Override
                                             public void onSuccess(Uri uri) {
                                                 Picasso.with(getApplicationContext()).load(uri).into(ivProfilePhoto);
+                                                Picasso.with(getApplicationContext()).load(uri).into(ivImageView);
                                                 progressDialog.dismiss();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
@@ -300,6 +334,7 @@ public class ProfileActivity extends AppCompatActivity
 
                     mDatabase.child("profile_photo").setValue(downloadUri);
                     Picasso.with(getApplicationContext()).load(downloadUri).into(ivProfilePhoto);
+                    Picasso.with(getApplicationContext()).load(downloadUri).into(ivImageView);
                     Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG);
                 }
             }).addOnFailureListener(new OnFailureListener() {

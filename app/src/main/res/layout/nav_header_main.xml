@@ -12,8 +12,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:scaleType="fitXY"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/fitness"/>
+        android:layout_height="match_parent"/>
 
     <TextView
         android:layout_width="match_parent"

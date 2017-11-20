@@ -23,18 +23,19 @@
     <include layout="@layout/content_profile" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/editProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
         android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|end"
         android:src="@android:drawable/ic_menu_edit" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/sign_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|start"
         android:src="@android:drawable/ic_lock_power_off" />
 
 </android.support.design.widget.CoordinatorLayout>
