@@ -42,11 +42,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -177,6 +181,8 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                     booking.put("dateTime", date_time);
                     booking.put("notes", notes);
                     booking.put("user", userId);
+                    String trainerId = getTrainer(trainerType.trim());
+                    booking.put("trainerId", trainerId);
                     mDatabase.push().setValue(booking).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(@NonNull Void T) {
@@ -197,6 +203,39 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
             });
 
             return rootView;
+        }
+
+        public String getTrainer(String trainerType){
+            final String trainerTypef = trainerType;
+            mDatabase.getParent().child("Trainers").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    //get all Trainers of this type in an array
+                    ArrayList<Map.Entry<String, Object>> trainersArray = new ArrayList<Map.Entry<String, Object>>();
+                    Map<String, Object> trainers = (Map<String, Object>) dataSnapshot.getValue();
+                    for(Map.Entry<String, Object> trainer : trainers.entrySet()){
+                        Map<String, String> trainerInfos = (Map<String, String>) trainer.getValue();
+                        for(Map.Entry<String, String> trainerInfo : trainerInfos.entrySet()){
+                            if(trainerInfo.getKey().equals("type") && trainerTypef.equals(trainerInfo.getValue().toString())) {
+                                trainersArray.add(trainer);
+                            }
+                        }
+                    }
+
+                    //get users location
+                    //get trainers location from DB
+                    //calculate distances
+                    //return trainerId
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            return "01";
         }
     }
 

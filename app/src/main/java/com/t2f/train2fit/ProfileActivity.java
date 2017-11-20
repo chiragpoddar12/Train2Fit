@@ -298,7 +298,7 @@ public class ProfileActivity extends AppCompatActivity
                     progressDialog.dismiss();
                     Uri downloadUri = taskSnapshot.getDownloadUrl();
 
-                    mDatabase.child(userId).child("profile_photo").setValue(downloadUri);
+                    mDatabase.child("profile_photo").setValue(downloadUri);
                     Picasso.with(getApplicationContext()).load(downloadUri).into(ivProfilePhoto);
                     Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG);
                 }
