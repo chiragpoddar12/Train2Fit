@@ -206,17 +206,18 @@ public class ProfileActivity extends AppCompatActivity
                                             public void onSuccess(Uri uri) {
                                                 Picasso.with(getApplicationContext()).load(uri).into(ivProfilePhoto);
                                                 Picasso.with(getApplicationContext()).load(uri).into(ivImageView);
-                                                progressDialog.dismiss();
+
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Toast.makeText(getApplicationContext(), "Problem getting profile picture", Toast.LENGTH_SHORT);
-                                                progressDialog.dismiss();
+
                                             }
                                         });
                                         break;
             }
+            progressDialog.dismiss();
         }
 //        for(Map.Entry<String, Object> currentUser : users.entrySet()){
 //            Map<String, Object> userValue = (Map<String, Object>) currentUser.getValue();
