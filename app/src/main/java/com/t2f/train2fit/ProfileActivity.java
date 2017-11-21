@@ -326,6 +326,7 @@ public class ProfileActivity extends AppCompatActivity
             progressDialog.setMessage("Uploading Image...");
             progressDialog.show();
             Uri uri = data.getData();
+            String abc = uri.toString();
             StorageReference filepath = mStorage.child("profilePhotos").child(userId);
             filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -333,7 +334,8 @@ public class ProfileActivity extends AppCompatActivity
                     progressDialog.dismiss();
                     Uri downloadUri = taskSnapshot.getDownloadUrl();
 
-                    mDatabase.child("profile_photo").setValue(downloadUri);
+
+                    mDatabase.child("profile_photo").setValue(downloadUri.toString());
                     Picasso.with(getApplicationContext()).load(downloadUri).into(ivProfilePhoto);
                     Picasso.with(getApplicationContext()).load(downloadUri).into(ivImageView);
                     Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_LONG);
