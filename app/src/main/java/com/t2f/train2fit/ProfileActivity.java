@@ -429,8 +429,9 @@ public class ProfileActivity extends AppCompatActivity
         }else if (id == R.id.feedback) { //to be deleted
             Intent feedbackActivityIntent=new Intent(ProfileActivity.this, feedbackActivity.class);
             startActivity(feedbackActivityIntent);
-        } else if (id == R.id.nav_share) {
-
+        } else if (id == R.id.nav_book_appointment) {
+            Intent bookAppointmentActivityIntent=new Intent(ProfileActivity.this, BookAppointmentActivity.class);
+            startActivity(bookAppointmentActivityIntent);
         } else if (id == R.id.nav_send) {
 
         } else if(id== R.id.signOutItem){

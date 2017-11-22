@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +47,9 @@ public class UpcomingAppointmentsFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_upcoming_appointments, container, false);
         listView = (ListView) v.findViewById(R.id.lvupcomingAppointments);
 
+
+
+
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
 
         mBookAppointmentAdapter =
@@ -64,11 +69,13 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 Object notes = map.get("notes");
                 Object user = map.get("user");
 
-                String trainerString = "Booked " + trainer.toString() + "\nDate: " + dateTime.toString() + "\nNotes: " + notes.toString();
-                UpcomingAppointmentList.add(trainerString);
-                mKeys.add(dataSnapshot.getKey());
+                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.toString())) {
+                    String trainerString = "Booked " + trainer.toString() + "\nDate: " + dateTime.toString() + "\nNotes: " + notes.toString();
+                    UpcomingAppointmentList.add(trainerString);
+                    mKeys.add(dataSnapshot.getKey());
 
-                mBookAppointmentAdapter.notifyDataSetChanged();
+                    mBookAppointmentAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -79,11 +86,12 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 Object notes = map.get("notes");
                 Object user = map.get("user");
 
-                String key = dataSnapshot.getKey();
-                int index = mKeys.indexOf(key);
-                UpcomingAppointmentList.set(index, trainer.toString());
-                mBookAppointmentAdapter.notifyDataSetChanged();
-
+                if (FirebaseAuth.getInstance().getCurrentUser().getUid() == user.toString()) {
+                    String key = dataSnapshot.getKey();
+                    int index = mKeys.indexOf(key);
+                    UpcomingAppointmentList.set(index, trainer.toString());
+                    mBookAppointmentAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override

@@ -152,8 +152,6 @@ public class feedbackActivity extends AppCompatActivity
         } else if (id == R.id.showProfilePage) {
             Intent profileActivityIntent=new Intent(feedbackActivity.this, ProfileActivity.class);
             startActivity(profileActivityIntent);
-        } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_send) {
 
         }else if(id== R.id.signOutItem){

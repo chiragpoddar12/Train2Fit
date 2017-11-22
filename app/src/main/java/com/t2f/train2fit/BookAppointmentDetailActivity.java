@@ -188,7 +188,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                         public void onSuccess(@NonNull Void T) {
                             Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful" , Toast.LENGTH_LONG ).show();
 //                          getActivity().finish();
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            Intent intent = new Intent(getActivity(), ProfileActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                         }
