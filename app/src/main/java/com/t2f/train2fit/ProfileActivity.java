@@ -97,7 +97,7 @@ public class ProfileActivity extends AppCompatActivity
         cancelSave = (FloatingActionButton) findViewById(R.id.cancel);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View hView =  navigationView.inflateHeaderView(R.layout.nav_header_main);
+        View hView =  navigationView.getHeaderView(0);
         ivImageView = (ImageView)hView.findViewById(R.id.imageView);
 
 

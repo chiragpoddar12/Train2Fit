@@ -1,7 +1,9 @@
 package com.t2f.train2fit;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -15,10 +17,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class feedbackActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +39,8 @@ public class feedbackActivity extends AppCompatActivity
     private RatingBar ratingBar;
     private EditText etComments;
     private DatabaseReference mDatabase;
+    private StorageReference mStorage;
+    private ImageView ivImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +67,26 @@ public class feedbackActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView =  navigationView.getHeaderView(0);
+        ivImageView = (ImageView)hView.findViewById(R.id.imageView);
+        mStorage = FirebaseStorage.getInstance().getReference();
+        Task<Uri> task = mStorage.child("profilePhotos").child(userId).getDownloadUrl();
+        task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.with(getApplicationContext()).load(uri).into(ivImageView);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Problem getting profile picture", Toast.LENGTH_SHORT);
+
+            }
+        });
         bSendFeedback = (Button) findViewById(R.id.bSendFeedback);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         etComments = (EditText) findViewById(R.id.editTextComments);
