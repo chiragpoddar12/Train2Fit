@@ -18,7 +18,7 @@
             android:id="@+id/imageViewTrainer"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/fitness"
+            app:srcCompat="@drawable/blank_profile"
             android:layout_marginTop="20dp"
             />
 
@@ -58,6 +58,15 @@
             tools:layout_editor_absoluteY="35dp"
             android:layout_below="@+id/textViewRatings"
             android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/bSendFeedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ratingBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="67dp"
+            android:text="Send Feedback" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -424,8 +424,9 @@ public class ProfileActivity extends AppCompatActivity
         } else if (id == R.id.showProfilePage) {
             Intent profileActivityIntent=new Intent(ProfileActivity.this, ProfileActivity.class);
             startActivity(profileActivityIntent);
-        }else if (id == R.id.nav_manage) {
-
+        }else if (id == R.id.feedback) { //to be deleted
+            Intent feedbackActivityIntent=new Intent(ProfileActivity.this, feedbackActivity.class);
+            startActivity(feedbackActivityIntent);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

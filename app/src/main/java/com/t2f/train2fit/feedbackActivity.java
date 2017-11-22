@@ -13,10 +13,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class feedbackActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private Button bSendFeedback;
+    private RatingBar ratingBar;
+    private EditText etComments;
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +51,23 @@ public class feedbackActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
+        bSendFeedback = (Button) findViewById(R.id.bSendFeedback);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        etComments = (EditText) findViewById(R.id.editTextComments);
+        bSendFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String bookingId = "-KyzqBidVQho8maHctdQ";
+                String comments = etComments.getText().toString();
+                mDatabase.child(bookingId).child("feedback").child("comment").setValue(comments);
+                String rating = ""+ratingBar.getRating();
+                mDatabase.child(bookingId).child("feedback").child("rating").setValue(rating);
+                Intent profileActivityIntent=new Intent(feedbackActivity.this, ProfileActivity.class);
+                startActivity(profileActivityIntent);
+            }
+        });
     }
 
     @Override
@@ -88,8 +115,6 @@ public class feedbackActivity extends AppCompatActivity
         } else if (id == R.id.showProfilePage) {
             Intent profileActivityIntent=new Intent(feedbackActivity.this, ProfileActivity.class);
             startActivity(profileActivityIntent);
-        } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

@@ -14,9 +14,8 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Sign Out" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/feedback"
+            android:title="Feedback" />
     </group>
 
     <item android:title="Communicate">
