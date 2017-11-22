@@ -67,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity
     private ProgressDialog progressDialog;
     private ImageView ivProfilePhoto;
     private ImageView ivImageView;
-    private EditText etName;
+//    private EditText etName;
     private EditText etAddress;
     private EditText etMobile;
     private EditText etDOB;
@@ -82,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity
         signOut = (FloatingActionButton) findViewById(R.id.sign_out);
         editProfile = (FloatingActionButton) findViewById(R.id.editProfile);
         tvName = (TextView) findViewById(R.id.textViewName);
-        etName = (EditText) findViewById(R.id.editTextName);
+//        etName = (EditText) findViewById(R.id.editTextName);
         tvAddress = (TextView) findViewById(R.id.textViewAddress);
         tvEmail = (TextView) findViewById(R.id.textViewEmail);
         tvDateOfBirth = (TextView) findViewById(R.id.textViewDateOfBirth);
@@ -167,14 +167,14 @@ public class ProfileActivity extends AppCompatActivity
                 //Save to DB
 //                ProgressDialog mProgressDialog = new ProgressDialog(getApplicationContext());
 //                mProgressDialog.show();
-                mDatabase.child("full_name").setValue(etName.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        tvName.setText(etName.getText());
-                        etName.setVisibility(View.INVISIBLE);
-                        tvName.setVisibility(View.VISIBLE);
-                    }
-                });
+//                mDatabase.child("full_name").setValue(etName.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        tvName.setText(etName.getText());
+//                        etName.setVisibility(View.INVISIBLE);
+//                        tvName.setVisibility(View.VISIBLE);
+//                    }
+//                });
                 mDatabase.child("dob").setValue(etDOB.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -217,9 +217,9 @@ public class ProfileActivity extends AppCompatActivity
         cancelSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tvName.setVisibility(View.VISIBLE);
-//                etName.setText(tvName.getText());
-                etName.setVisibility(View.INVISIBLE);
+//                tvName.setVisibility(View.VISIBLE);
+////                etName.setText(tvName.getText());
+//                etName.setVisibility(View.INVISIBLE);
 
                 tvAddress.setVisibility(View.VISIBLE);
 //                etAddress.setText(tvAddress.getText());
@@ -239,14 +239,15 @@ public class ProfileActivity extends AppCompatActivity
 
                 cancelSave.setVisibility(View.INVISIBLE);
                 saveButton.setVisibility(View.INVISIBLE);
+                editProfile.setVisibility(View.VISIBLE);
             }
         });
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tvName.setVisibility(View.INVISIBLE);
-                etName.setText(tvName.getText());
-                etName.setVisibility(View.VISIBLE);
+//                tvName.setVisibility(View.INVISIBLE);
+//                etName.setText(tvName.getText());
+//                etName.setVisibility(View.VISIBLE);
 
                 tvAddress.setVisibility(View.INVISIBLE);
                 etAddress.setText(tvAddress.getText());
@@ -266,6 +267,7 @@ public class ProfileActivity extends AppCompatActivity
 
                 cancelSave.setVisibility(View.VISIBLE);
                 saveButton.setVisibility(View.VISIBLE);
+                editProfile.setVisibility(View.INVISIBLE);
             }
         });
 
