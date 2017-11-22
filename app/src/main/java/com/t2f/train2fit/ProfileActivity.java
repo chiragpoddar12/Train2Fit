@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -420,11 +421,10 @@ public class ProfileActivity extends AppCompatActivity
             // Handle the camera action
             Intent bookingIntent=new Intent(ProfileActivity.this, BookingActivity.class);
             startActivity(bookingIntent);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.showProfilePage) {
+            Intent profileActivityIntent=new Intent(ProfileActivity.this, ProfileActivity.class);
+            startActivity(profileActivityIntent);
+        }else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
