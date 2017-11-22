@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +43,7 @@ public class feedbackActivity extends AppCompatActivity
     private DatabaseReference mDatabase;
     private StorageReference mStorage;
     private ImageView ivImageView;
+    private FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +59,7 @@ public class feedbackActivity extends AppCompatActivity
 //                        .setAction("Action", null).show();
 //            }
 //        });
-
+        auth = FirebaseAuth.getInstance();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -153,10 +156,20 @@ public class feedbackActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        }else if(id== R.id.signOutItem){
+            signOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void signOut() {
+        auth.signOut();
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        LoginManager.getInstance().logOut();
+        Intent intent = new Intent(feedbackActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }

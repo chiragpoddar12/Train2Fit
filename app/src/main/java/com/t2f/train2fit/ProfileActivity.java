@@ -48,7 +48,7 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FloatingActionButton signOut;
+//    private FloatingActionButton signOut;
     private FloatingActionButton editProfile;
     private FloatingActionButton saveButton;
     private FloatingActionButton cancelSave;
@@ -79,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        signOut = (FloatingActionButton) findViewById(R.id.sign_out);
+//        signOut = (FloatingActionButton) findViewById(R.id.sign_out);
         editProfile = (FloatingActionButton) findViewById(R.id.editProfile);
         tvName = (TextView) findViewById(R.id.textViewName);
 //        etName = (EditText) findViewById(R.id.editTextName);
@@ -302,12 +302,12 @@ public class ProfileActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();
-            }
-        });
+//        signOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                signOut();
+//            }
+//        });
     }
 
     private void signOut() {
@@ -433,6 +433,8 @@ public class ProfileActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if(id== R.id.signOutItem){
+            signOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
