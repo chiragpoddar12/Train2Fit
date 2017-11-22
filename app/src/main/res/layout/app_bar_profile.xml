@@ -38,4 +38,24 @@
         android:layout_gravity="bottom|start"
         android:src="@android:drawable/ic_lock_power_off" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|center_horizontal"
+        android:src="@android:drawable/ic_menu_save"
+        android:visibility="invisible"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|right"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:visibility="invisible"/>
+
+
+
 </android.support.design.widget.CoordinatorLayout>

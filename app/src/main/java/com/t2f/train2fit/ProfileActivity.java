@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,9 @@ public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FloatingActionButton signOut;
+    private FloatingActionButton editProfile;
+    private FloatingActionButton saveButton;
+    private FloatingActionButton cancelSave;
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
     private DatabaseReference mDatabase;
@@ -62,6 +66,11 @@ public class ProfileActivity extends AppCompatActivity
     private ProgressDialog progressDialog;
     private ImageView ivProfilePhoto;
     private ImageView ivImageView;
+    private EditText etName;
+    private EditText etAddress;
+    private EditText etMobile;
+    private EditText etDOB;
+    private EditText etEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +79,21 @@ public class ProfileActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         signOut = (FloatingActionButton) findViewById(R.id.sign_out);
+        editProfile = (FloatingActionButton) findViewById(R.id.editProfile);
         tvName = (TextView) findViewById(R.id.textViewName);
+        etName = (EditText) findViewById(R.id.editTextName);
         tvAddress = (TextView) findViewById(R.id.textViewAddress);
         tvEmail = (TextView) findViewById(R.id.textViewEmail);
         tvDateOfBirth = (TextView) findViewById(R.id.textViewDateOfBirth);
         tvMobile = (TextView) findViewById(R.id.textViewMobile);
         progressDialog = new ProgressDialog(this);
         ivProfilePhoto = (ImageView) findViewById(R.id.ivProfilePhoto);
+        etAddress = (EditText) findViewById(R.id.editTextAddress);
+        etDOB = (EditText) findViewById(R.id.editTextDateOfBirth);
+        etEmail = (EditText) findViewById(R.id.editTextEmail);
+        etMobile = (EditText) findViewById(R.id.editTextMobile);
+        saveButton = (FloatingActionButton) findViewById(R.id.save);
+        cancelSave = (FloatingActionButton) findViewById(R.id.cancel);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView =  navigationView.inflateHeaderView(R.layout.nav_header_main);
@@ -143,6 +160,114 @@ public class ProfileActivity extends AppCompatActivity
             }
         });
 
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Save to DB
+//                ProgressDialog mProgressDialog = new ProgressDialog(getApplicationContext());
+//                mProgressDialog.show();
+                mDatabase.child("full_name").setValue(etName.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        tvName.setText(etName.getText());
+                        etName.setVisibility(View.INVISIBLE);
+                        tvName.setVisibility(View.VISIBLE);
+                    }
+                });
+                mDatabase.child("dob").setValue(etDOB.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        tvDateOfBirth.setText(etDOB.getText());
+                        etDOB.setVisibility(View.INVISIBLE);
+                        tvDateOfBirth.setVisibility(View.VISIBLE);
+                    }
+                });
+                mDatabase.child("address").setValue(etAddress.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        tvAddress.setText(etAddress.getText());
+                        etAddress.setVisibility(View.INVISIBLE);
+                        tvAddress.setVisibility(View.VISIBLE);
+                    }
+                });
+                mDatabase.child("mobile").setValue(etMobile.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        tvMobile.setText(etMobile.getText());
+                        etMobile.setVisibility(View.INVISIBLE);
+                        tvMobile.setVisibility(View.VISIBLE);
+                    }
+                });
+                mDatabase.child("email").setValue(etEmail.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        tvEmail.setText(etEmail.getText());
+                        etEmail.setVisibility(View.INVISIBLE);
+                        tvEmail.setVisibility(View.VISIBLE);
+//                        progressDialog.dismiss();
+                    }
+                });
+
+                cancelSave.setVisibility(View.INVISIBLE);
+                saveButton.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        cancelSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvName.setVisibility(View.VISIBLE);
+//                etName.setText(tvName.getText());
+                etName.setVisibility(View.INVISIBLE);
+
+                tvAddress.setVisibility(View.VISIBLE);
+//                etAddress.setText(tvAddress.getText());
+                etAddress.setVisibility(View.INVISIBLE);
+
+                tvDateOfBirth.setVisibility(View.VISIBLE);
+//                etDOB.setText(tvDateOfBirth.getText());
+                etDOB.setVisibility(View.INVISIBLE);
+
+                tvEmail.setVisibility(View.VISIBLE);
+//                etEmail.setText(tvEmail.getText());
+                etEmail.setVisibility(View.INVISIBLE);
+
+                tvMobile.setVisibility(View.VISIBLE);
+//                etMobile.setText(tvMobile.getText());
+                etMobile.setVisibility(View.INVISIBLE);
+
+                cancelSave.setVisibility(View.INVISIBLE);
+                saveButton.setVisibility(View.INVISIBLE);
+            }
+        });
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvName.setVisibility(View.INVISIBLE);
+                etName.setText(tvName.getText());
+                etName.setVisibility(View.VISIBLE);
+
+                tvAddress.setVisibility(View.INVISIBLE);
+                etAddress.setText(tvAddress.getText());
+                etAddress.setVisibility(View.VISIBLE);
+
+                tvDateOfBirth.setVisibility(View.INVISIBLE);
+                etDOB.setText(tvDateOfBirth.getText());
+                etDOB.setVisibility(View.VISIBLE);
+
+                tvEmail.setVisibility(View.INVISIBLE);
+                etEmail.setText(tvEmail.getText());
+                etEmail.setVisibility(View.VISIBLE);
+
+                tvMobile.setVisibility(View.INVISIBLE);
+                etMobile.setText(tvMobile.getText());
+                etMobile.setVisibility(View.VISIBLE);
+
+                cancelSave.setVisibility(View.VISIBLE);
+                saveButton.setVisibility(View.VISIBLE);
+            }
+        });
+
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -156,14 +281,14 @@ public class ProfileActivity extends AppCompatActivity
             }
         };
 
-        FloatingActionButton fbEditProfile = (FloatingActionButton) findViewById(R.id.editProfile);
-        fbEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fbEditProfile = (FloatingActionButton) findViewById(R.id.editProfile);
+//        fbEditProfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
