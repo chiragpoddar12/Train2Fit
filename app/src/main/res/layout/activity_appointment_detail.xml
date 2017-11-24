@@ -24,7 +24,7 @@
         android:text="Vipin Hans" />
 
     <TextView
-        android:id="@+id/email"
+        android:id="@+id/emailTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -33,7 +33,7 @@
         android:text="email: abs@vipinhans.com" />
 
     <TextView
-        android:id="@+id/phn"
+        android:id="@+id/phnTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -42,7 +42,7 @@
         android:text="Phone: 1234567890" />
 
     <TextView
-        android:id="@+id/time"
+        android:id="@+id/timeTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -59,10 +59,24 @@
         android:textSize="18sp"
         android:text="Location: Blackrock" />
 
-    <Button
-        android:id="@+id/cnclBooking"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cancel Booking" />
+        android:layout_height="50dp"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/cnclBooking"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Cancel Booking" />
+
+        <Button
+            android:id="@+id/rescheduleBooking"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Reschedule Booking" />
+
+    </LinearLayout>
 </LinearLayout>

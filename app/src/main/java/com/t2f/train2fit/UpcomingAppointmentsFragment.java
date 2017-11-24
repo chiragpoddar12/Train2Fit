@@ -34,7 +34,8 @@ public class UpcomingAppointmentsFragment extends Fragment {
     private ArrayAdapter<String> mBookAppointmentAdapter;
     final ArrayList<String> UpcomingAppointmentList = new ArrayList<String>();
     private ArrayList<String> mKeys = new ArrayList<>();
-
+    private String trainer,dateTime,user,notes;
+    public static boolean flag = false;
     public UpcomingAppointmentsFragment() {
         // Required empty public constructor
     }
@@ -59,17 +60,43 @@ public class UpcomingAppointmentsFragment extends Fragment {
                         R.id.list_item_appointments_textview, // The ID of the textview to populate.
                         UpcomingAppointmentList);
 
+        populateList();
+
+        listView.setAdapter(mBookAppointmentAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String selectedAppointment = mBookAppointmentAdapter.getItem(position);
+                Intent detailsIntent = new Intent(getContext(),AppointmentDetailActivity.class);
+                selectedAppointment=selectedAppointment.toString();
+                trainer=selectedAppointment.substring(7,selectedAppointment.indexOf("\n"));
+                selectedAppointment=selectedAppointment.substring(selectedAppointment.indexOf("\n"));
+                dateTime=selectedAppointment.substring(7,selectedAppointment.lastIndexOf("\n"));
+                detailsIntent.putExtra("trainerType",trainer);
+                detailsIntent.putExtra("date",dateTime);
+                flag=true;
+//              detailsIntent.putExtra("notes",notes);
+                startActivity(detailsIntent);
+            }
+        });
+        return v;
+
+    }
+
+    private void populateList() {
+        mBookAppointmentAdapter.clear();
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                Object trainer = map.get("trainerType");
-                Object dateTime = map.get("dateTime");
-                Object notes = map.get("notes");
-                Object user = map.get("user");
+                trainer = (String) map.get("trainerType");
+                dateTime = (String) map.get("dateTime");
+                notes = (String) map.get("notes");
+                user = (String) map.get("user");
 
                 if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.toString())) {
+
                     String trainerString = "Booked " + trainer.toString() + "\nDate: " + dateTime.toString() + "\nNotes: " + notes.toString();
                     UpcomingAppointmentList.add(trainerString);
                     mKeys.add(dataSnapshot.getKey());
@@ -110,18 +137,14 @@ public class UpcomingAppointmentsFragment extends Fragment {
             }
         });
 
-        listView.setAdapter(mBookAppointmentAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                CharSequence selectedAppointment = mBookAppointmentAdapter.getItem(position);
-                Intent detailsIntent = new Intent(getContext(),AppointmentDetailActivity.class);
-                detailsIntent.putExtra("TYPE",selectedAppointment);
-                startActivity(detailsIntent);
-            }
-        });
-        return v;
-
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(flag) {
+            flag=false;
+            populateList();
+        }
+    }
 }
