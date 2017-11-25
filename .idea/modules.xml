@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\MasterLord\AndroidStudioProjects\Train2Fit1\Train2Fit.iml" filepath="C:\Users\MasterLord\AndroidStudioProjects\Train2Fit1\Train2Fit.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Train2Fit1.iml" filepath="$PROJECT_DIR$/.idea/Train2Fit1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Train2Fit.iml" filepath="$PROJECT_DIR$/Train2Fit.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\MasterLord\AndroidStudioProjects\Train2Fit1\app\app.iml" filepath="C:\Users\MasterLord\AndroidStudioProjects\Train2Fit1\app\app.iml" />
     </modules>
   </component>
 </project>

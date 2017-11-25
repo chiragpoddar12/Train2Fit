@@ -1,8 +1,11 @@
 package com.t2f.train2fit;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,6 +40,36 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         locationTV=(TextView)findViewById(R.id.location);
         cnl=(Button)findViewById(R.id.cnclBooking) ;
         reschedule=(Button)findViewById(R.id.rescheduleBooking) ;
+
+        phnTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:0123456789"));
+                    startActivity(intent);
+                }catch (Exception e){
+                    Log.e("TAG","Error in Phone call");
+                }
+
+            }
+        });
+
+        emailTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("plain/text");
+                    intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "some@email.address" });
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "subject");
+                    intent.putExtra(Intent.EXTRA_TEXT, "mail body");
+                    startActivity(Intent.createChooser(intent, ""));
+                }catch(ActivityNotFoundException e){
+                    Log.e("TAG","Error in Email activity");
+                }
+            }
+        });
 
         trainerType=intent.getStringExtra("trainerType");
         date=intent.getStringExtra("date");
