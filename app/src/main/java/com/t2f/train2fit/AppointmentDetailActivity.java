@@ -46,7 +46,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try{
                     Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse("tel:0123456789"));
+                    intent.setData(Uri.parse("tel:"+phnTV.getText()));
                     startActivity(intent);
                 }catch (Exception e){
                     Log.e("TAG","Error in Phone call");
@@ -61,7 +61,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                 try{
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("plain/text");
-                    intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "some@email.address" });
+                    intent.putExtra(Intent.EXTRA_EMAIL, new String[] {(String) emailTV.getText()});
                     intent.putExtra(Intent.EXTRA_SUBJECT, "subject");
                     intent.putExtra(Intent.EXTRA_TEXT, "mail body");
                     startActivity(Intent.createChooser(intent, ""));

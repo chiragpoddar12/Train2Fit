@@ -40,7 +40,7 @@
         android:linksClickable="true"
         android:gravity="center_vertical"
         android:textSize="18sp"
-        android:text="Phone: 1234567890" />
+        android:text="phone: +353 123456789" />
 
     <TextView
         android:id="@+id/timeTV"
