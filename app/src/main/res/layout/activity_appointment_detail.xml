@@ -21,7 +21,16 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:textSize="18sp"
-        android:text="Vipin Hans" />
+        android:text="Trainer Name: Trainer1" />
+
+    <TextView
+        android:id="@+id/trainerType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:textSize="18sp"
+        android:text="Trainer Type: Yoga Trainer" />
 
     <TextView
         android:id="@+id/emailTV"
@@ -30,7 +39,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:textSize="18sp"
-        android:text="email: abs@vipinhans.com" />
+        android:text="email: yogatrainer@gmail.com" />
 
     <TextView
         android:id="@+id/phnTV"
@@ -49,7 +58,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:textSize="18sp"
-        android:text="Time: 11:20" />
+        android:text="Time: 24/11/20117 11:20" />
 
     <TextView
         android:id="@+id/location"
@@ -67,17 +76,19 @@
 
         <Button
             android:id="@+id/cnclBooking"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Cancel Booking" />
+            android:text="Cancel" />
 
         <Button
             android:id="@+id/rescheduleBooking"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Reschedule Booking" />
+            android:text="Reschedule" />
 
     </LinearLayout>
 </LinearLayout>
