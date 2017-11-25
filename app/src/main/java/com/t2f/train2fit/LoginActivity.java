@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private CallbackManager callbackManager;
     private AccessToken facebookaccessToken;
     private LoginButton login_button;
+    long lastPress;
+    Toast backpressToast;
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
@@ -115,7 +117,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (mAuthListener != null) {
             auth.removeAuthStateListener(mAuthListener);
         }
+    }//Double tap on back button to exit
+    @Override
+    public void onBackPressed() {
+        long currentTime = System.currentTimeMillis();
+        if(currentTime - lastPress > 5000){
+            backpressToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_LONG);
+            backpressToast.show();
+            lastPress = currentTime;
+
+        } else {
+            if (backpressToast != null) backpressToast.cancel();
+            super.onBackPressed();
+            //Exit Application on back press instead of moving to the first Activity
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
+
+
 
 
     private void EmailLogin(){
