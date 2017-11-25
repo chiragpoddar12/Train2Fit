@@ -50,7 +50,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, BookingActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -113,7 +113,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, BookingActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

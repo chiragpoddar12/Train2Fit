@@ -18,6 +18,10 @@ package com.t2f.train2fit;
 
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -25,7 +29,9 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyFirebaseIIDService";
-
+    public String userId;
+    private FirebaseAuth auth;
+    private DatabaseReference mDatabase;
     /**
      * Called if InstanceID token is updated. This may occur if the security of
      * the previous token had been compromised. Note that this is called when the InstanceID token
@@ -38,6 +44,16 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
+        //get firebase auth instance
+        auth = FirebaseAuth.getInstance();
+
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        userId = user.getUid();//retrieve from session
+//        String userId = "sfosniocnoi6868161";
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+        mDatabase.child("notificationTokens").setValue(refreshedToken);
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
