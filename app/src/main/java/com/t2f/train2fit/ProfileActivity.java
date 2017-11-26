@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -97,6 +99,8 @@ public class ProfileActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView =  navigationView.getHeaderView(0);
+        NavigationMenuView navMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+        navMenuView.addItemDecoration(new DividerItemDecoration(ProfileActivity.this,DividerItemDecoration.VERTICAL));
         ivImageView = (ImageView)hView.findViewById(R.id.imageView);
 
 
@@ -431,9 +435,7 @@ public class ProfileActivity extends AppCompatActivity
         } else if (id == R.id.nav_book_appointment) {
             Intent bookAppointmentActivityIntent=new Intent(ProfileActivity.this, BookAppointmentActivity.class);
             startActivity(bookAppointmentActivityIntent);
-        } else if (id == R.id.nav_send) {
-
-        } else if(id== R.id.signOutItem){
+        }else if(id== R.id.signOutItem){
             signOut();
         }
 

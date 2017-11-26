@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#138D75"
+    android:background="#23B797"
     android:fitsSystemWindows="true"
     tools:context="com.t2f.train2fit.LoginActivity">
 
@@ -67,9 +67,10 @@
         <Button
             android:id="@+id/btn_login"
             android:textColor="@android:color/white"
-            android:background="#212F3D"
-            android:layout_width="match_parent"
+            android:background="@drawable/corner_button"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="10dip"
             android:text="@string/btn_login" />
 
@@ -83,6 +84,12 @@
             android:text="@string/btn_forgot_password"
             android:textAllCaps="false" />
 
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#c0c0c0"
+            android:layout_gravity="center"/>
+
         <!-- Link to Login Screen -->
 
         <Button
@@ -95,6 +102,12 @@
             android:text="@string/btn_link_to_register"
             android:textAllCaps="false"
             android:textSize="15dp" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#c0c0c0"
+            android:layout_gravity="center"/>
 
 
 
