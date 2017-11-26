@@ -35,6 +35,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -113,6 +114,9 @@ public class ProfileActivity extends AppCompatActivity
         userId = user.getUid();//retrieve from session
 //        String userId = "sfosniocnoi6868161";
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        mDatabase.child("notificationTokens").setValue(refreshedToken);
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
