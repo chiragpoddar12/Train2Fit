@@ -4,34 +4,38 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_book_appointment"
+            android:icon="@drawable/ic_appointment"
             android:title="Book Appointment" />
+    </group>
+
+    <group
+        android:checkableBehavior="single">
         <item
             android:id="@+id/showProfilePage"
+            android:icon="@drawable/ic_profile"
             android:title="My Profile" />
+    </group>
+
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_my_booking"
             android:title="My Bookings" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Sign Out" />
+    </group>
+
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/feedback"
+            android:icon="@drawable/ic_feedback"
             android:title="Feedback" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-            <item
-                android:id="@+id/signOutItem"
-                android:icon="@drawable/signout"
-                android:title="Sign Out" />
-        </menu>
-    </item>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/signOutItem"
+            android:icon="@drawable/ic_sign_out"
+            android:title="Sign Out" />
+    </group>
+
 
 </menu>
