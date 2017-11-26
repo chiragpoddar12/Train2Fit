@@ -94,9 +94,14 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     String lat = (String) map.get("lat");
                     String lng = (String) map.get("lng");
                     String type = (String) map.get("type");
+                    String phone = (String) map.get("phone");
+                    String email = (String) map.get("email");
 
-                    nameTV.setText(fullName);
-                    typeTV.setText(type);
+                    nameTV.setText("Trainer Name: "+fullName);
+                    typeTV.setText("Trainer Type: "+type);
+                    phnTV.setText("Phone: "+phone);
+                    emailTV.setText("Email: "+email);
+
 
                 }
 
