@@ -12,7 +12,7 @@
         android:layout_height="200dp"
         android:scaleType="fitXY"
 
-        android:src="@drawable/fitness" />
+        android:src="@drawable/fitness1" />
 
     <TextView
         android:id="@+id/trainerNam"
@@ -76,7 +76,7 @@
 
         <Button
             android:id="@+id/cnclBooking"
-            style="@style/Widget.AppCompat.Button"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -84,7 +84,7 @@
 
         <Button
             android:id="@+id/rescheduleBooking"
-            style="@style/Widget.AppCompat.Button"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

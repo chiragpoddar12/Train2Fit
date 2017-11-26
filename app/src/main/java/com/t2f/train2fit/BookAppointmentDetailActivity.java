@@ -212,11 +212,17 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     //get all Trainers of this type in an array
                     ArrayList<Map.Entry<String, Object>> trainersArray = new ArrayList<Map.Entry<String, Object>>();
+
                     Map<String, Object> trainers = (Map<String, Object>) dataSnapshot.getValue();
+
                     for(Map.Entry<String, Object> trainer : trainers.entrySet()){
+
                         Map<String, String> trainerInfos = (Map<String, String>) trainer.getValue();
-                        for(Map.Entry<String, String> trainerInfo : trainerInfos.entrySet()){
-                            if(trainerInfo.getKey().equals("type") && trainerTypef.equals(trainerInfo.getValue().toString())) {
+
+                        for(Map.Entry<String, String> trainerInfo : trainerInfos.entrySet())
+                        {
+                            if(trainerInfo.getKey().equals("type") && trainerTypef.equals(trainerInfo.getValue().toString()))
+                            {
                                 trainersArray.add(trainer);
                             }
                         }

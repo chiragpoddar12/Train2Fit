@@ -18,8 +18,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StreamDownloadTask;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -34,7 +38,7 @@ public class UpcomingAppointmentsFragment extends Fragment {
     private ArrayAdapter<String> mBookAppointmentAdapter;
     final ArrayList<String> UpcomingAppointmentList = new ArrayList<String>();
     private ArrayList<String> mKeys = new ArrayList<>();
-    private String trainer,dateTime,user,notes;
+    private String trainer,dateTime,user,notes, trainerId,status;
     public static boolean flag = false;
     public UpcomingAppointmentsFragment() {
         // Required empty public constructor
@@ -74,6 +78,7 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 dateTime=selectedAppointment.substring(7,selectedAppointment.lastIndexOf("\n"));
                 detailsIntent.putExtra("trainerType",trainer);
                 detailsIntent.putExtra("date",dateTime);
+                detailsIntent.putExtra("trainerId",trainerId);
                 flag=true;
 //              detailsIntent.putExtra("notes",notes);
                 startActivity(detailsIntent);
@@ -94,10 +99,12 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 dateTime = (String) map.get("dateTime");
                 notes = (String) map.get("notes");
                 user = (String) map.get("user");
+                trainerId = (String) map.get("trainerId");
+                status = getStatus(dateTime.substring(0,10));
 
                 if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.toString())) {
 
-                    String trainerString = "Booked " + trainer.toString() + "\nDate: " + dateTime.toString() + "\nNotes: " + notes.toString();
+                    String trainerString = "Booked " + trainer.toString() + "\nDate: " + dateTime.toString() + "\nNotes: " + notes.toString() + "\nStatus: " + status;
                     UpcomingAppointmentList.add(trainerString);
                     mKeys.add(dataSnapshot.getKey());
 
@@ -137,6 +144,44 @@ public class UpcomingAppointmentsFragment extends Fragment {
             }
         });
 
+    }
+
+    private String getStatus(String appointmentDate)
+    {
+        String status = "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        Date current = new Date();
+
+        try {
+            current = sdf.parse(sdf.format(current));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date appointment = new Date();
+        try
+        {
+            appointment = sdf.parse(appointmentDate);
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (current.after(appointment)) {
+            status = "COMPLETED";
+        }
+
+        if (current.before(appointment)) {
+            status = "UPCOMING";
+        }
+
+        if (current.equals(appointment)) {
+            status = "TODAY";
+        }
+
+        return  status;
     }
 
     @Override
