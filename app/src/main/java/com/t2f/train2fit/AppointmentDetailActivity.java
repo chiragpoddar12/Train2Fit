@@ -20,10 +20,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Map;
 
 public class AppointmentDetailActivity extends AppCompatActivity {
-    TextView nameTV, emailTV,phnTV, timeTV,locationTV;
+    TextView nameTV, emailTV,phnTV, timeTV,locationTV, typeTV;
     FirebaseAuth auth;
     private DatabaseReference mDatabase;
-    private String trainerType,date,note;
+    private String trainerType,date,note, trainerId;
     Button cnl,reschedule;
     String key;
     @Override
@@ -40,6 +40,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         locationTV=(TextView)findViewById(R.id.location);
         cnl=(Button)findViewById(R.id.cnclBooking) ;
         reschedule=(Button)findViewById(R.id.rescheduleBooking) ;
+        typeTV = (TextView) findViewById(R.id.trainerType);
 
         phnTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,29 +75,45 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         trainerType=intent.getStringExtra("trainerType");
         date=intent.getStringExtra("date");
         note=intent.getStringExtra("notes");
+        trainerId = intent.getStringExtra("trainerId");
 
 
 
         auth=FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Trainers");
 
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                Object trainer = map.get("trainerType");
-                Object dateTime = map.get("dateTime");
-                Object notes = map.get("notes");
-                Object user = map.get("user");
 
-                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.toString())) {
-                    if(trainerType.equalsIgnoreCase(trainer.toString())&&date.equalsIgnoreCase(dateTime.toString()))
-                    {
-                        key=dataSnapshot.getKey();
+                if(dataSnapshot.getKey().equals(trainerId))
+                {
+                    String fullName = (String) map.get("fullName");
+                    String lat = (String) map.get("lat");
+                    String lng = (String) map.get("lng");
+                    String type = (String) map.get("type");
+                    String phone = (String) map.get("phone");
+                    String email = (String) map.get("email");
 
-                    }
+                    nameTV.setText("Trainer Name: "+fullName);
+                    typeTV.setText("Trainer Type: "+type);
+                    phnTV.setText("Phone: "+phone);
+                    emailTV.setText("Email: "+email);
+
+
                 }
+
+
+
+//                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.toString())) {
+//                    if(trainerType.equalsIgnoreCase(trainer.toString())&&date.equalsIgnoreCase(dateTime.toString()))
+//                    {
+//                        key=dataSnapshot.getKey();
+//
+//                    }
+//                }
             }
 
             @Override

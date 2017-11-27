@@ -98,6 +98,7 @@ public class ProfileActivity extends AppCompatActivity
         saveButton = (FloatingActionButton) findViewById(R.id.save);
         cancelSave = (FloatingActionButton) findViewById(R.id.cancel);
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView =  navigationView.getHeaderView(0);
         NavigationMenuView navMenuView = (NavigationMenuView) navigationView.getChildAt(0);
