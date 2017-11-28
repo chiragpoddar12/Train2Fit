@@ -37,8 +37,9 @@ public class UpcomingAppointmentsFragment extends Fragment {
 
     private ArrayAdapter<String> mBookAppointmentAdapter;
     final ArrayList<String> UpcomingAppointmentList = new ArrayList<String>();
+    final ArrayList<DataSnapshot> assignedTrainerList = new ArrayList<DataSnapshot>();
     private ArrayList<String> mKeys = new ArrayList<>();
-    private String trainer,dateTime,user,notes, trainerId,status;
+    private String trainer,dateTime,user,notes, trainerId,status,bookingId;
     public static boolean flag = false;
     public UpcomingAppointmentsFragment() {
         // Required empty public constructor
@@ -71,14 +72,22 @@ public class UpcomingAppointmentsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String selectedAppointment = mBookAppointmentAdapter.getItem(position);
+                DataSnapshot dataSnapshot = assignedTrainerList.get(position);
+                bookingId = dataSnapshot.getKey().toString();
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                trainer = (String) map.get("trainerType");
+                dateTime = (String) map.get("dateTime");
+                notes = (String) map.get("notes");
+                user = (String) map.get("user");
+                trainerId = (String) map.get("trainerId");
+                status = getStatus(dateTime.substring(0,10));
                 Intent detailsIntent = new Intent(getContext(),AppointmentDetailActivity.class);
-                selectedAppointment=selectedAppointment.toString();
-                trainer=selectedAppointment.substring(7,selectedAppointment.indexOf("\n"));
-                selectedAppointment=selectedAppointment.substring(selectedAppointment.indexOf("\n"));
-                dateTime=selectedAppointment.substring(7,selectedAppointment.lastIndexOf("\n"));
                 detailsIntent.putExtra("trainerType",trainer);
                 detailsIntent.putExtra("date",dateTime);
+                detailsIntent.putExtra("notes",notes);
                 detailsIntent.putExtra("trainerId",trainerId);
+                detailsIntent.putExtra("status",status);
+                detailsIntent.putExtra("bookingID",bookingId);
                 flag=true;
 //              detailsIntent.putExtra("notes",notes);
                 startActivity(detailsIntent);
@@ -95,6 +104,7 @@ public class UpcomingAppointmentsFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                bookingId = dataSnapshot.getKey().toString();
                 trainer = (String) map.get("trainerType");
                 dateTime = (String) map.get("dateTime");
                 notes = (String) map.get("notes");
@@ -106,6 +116,7 @@ public class UpcomingAppointmentsFragment extends Fragment {
 
                     String trainerString = "Booked " + trainer.toString() + "\nDate: " + dateTime.toString() + "\nNotes: " + notes.toString() + "\nStatus: " + status;
                     UpcomingAppointmentList.add(trainerString);
+                    assignedTrainerList.add(dataSnapshot);
                     mKeys.add(dataSnapshot.getKey());
 
                     mBookAppointmentAdapter.notifyDataSetChanged();
@@ -124,6 +135,7 @@ public class UpcomingAppointmentsFragment extends Fragment {
                     String key = dataSnapshot.getKey();
                     int index = mKeys.indexOf(key);
                     UpcomingAppointmentList.set(index, trainer.toString());
+                    assignedTrainerList.set(index,dataSnapshot);
                     mBookAppointmentAdapter.notifyDataSetChanged();
                 }
             }

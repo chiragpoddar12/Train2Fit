@@ -2,30 +2,56 @@ package com.t2f.train2fit;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
+import static android.R.attr.width;
+import static com.t2f.train2fit.R.attr.height;
+import static com.t2f.train2fit.R.id.imageView;
+
 public class AppointmentDetailActivity extends AppCompatActivity {
-    TextView nameTV, emailTV,phnTV, timeTV,locationTV, typeTV;
+    TextView nameTV, emailTV,phnTV, timeTV,notesTV, typeTV;
+    private ImageView profilePicIV;
     FirebaseAuth auth;
     private DatabaseReference mDatabase;
     private String trainerType,date,note, trainerId;
     Button cnl,reschedule;
     String key;
+    private StorageReference mStorage;
+    public String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +63,11 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         emailTV=(TextView)findViewById(R.id.emailTV);
         phnTV=(TextView)findViewById(R.id.phnTV);
         timeTV=(TextView)findViewById(R.id.timeTV);
-        locationTV=(TextView)findViewById(R.id.location);
+        notesTV=(TextView)findViewById(R.id.notes);
         cnl=(Button)findViewById(R.id.cnclBooking) ;
         reschedule=(Button)findViewById(R.id.rescheduleBooking) ;
         typeTV = (TextView) findViewById(R.id.trainerType);
-
+        profilePicIV = (ImageView) findViewById(R.id.profilePicIV);
         phnTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,64 +102,55 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         date=intent.getStringExtra("date");
         note=intent.getStringExtra("notes");
         trainerId = intent.getStringExtra("trainerId");
-
-
-
+        timeTV.setText(date.toString());
+        notesTV.setText(note.toString());
         auth=FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Trainers");
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userId = user.getUid();
 
-        mDatabase.addChildEventListener(new ChildEventListener() {
+        Query phoneQuery = mDatabase.orderByChild("trainerId").equalTo(trainerId);
+        phoneQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
-                if(dataSnapshot.getKey().equals(trainerId))
-                {
-                    String fullName = (String) map.get("fullName");
-                    String lat = (String) map.get("lat");
-                    String lng = (String) map.get("lng");
-                    String type = (String) map.get("type");
-                    String phone = (String) map.get("phone");
-                    String email = (String) map.get("email");
+                    Map<String, Object> trainerInfos = (Map<String, Object>) singleSnapshot.getValue();
+                    for (Map.Entry<String, Object> userInfo : trainerInfos.entrySet()) {
+                        switch (userInfo.getKey()) {
+                            case "fullName":
+                                nameTV.setText(userInfo.getValue().toString());
+                                break;
+                            case "type":
+                                typeTV.setText(userInfo.getValue().toString());
+                                break;
+                            case "phone":
+                                phnTV.setText(userInfo.getValue().toString());
+                                break;
+                            case "email":
+                                emailTV.setText(userInfo.getValue().toString());
+                                break;
+                            case "profilePhoto":
+                                URL profilePhotoURL = null;
+                                try {
+                                    profilePhotoURL = new URL(userInfo.getValue().toString());
+                                } catch (MalformedURLException e) {
+                                    e.printStackTrace();
+                                }
 
-                    nameTV.setText(fullName);
-                    typeTV.setText(type);
-                    phnTV.setText(phone);
-                    emailTV.setText(email);
-
+                                Picasso.with(getApplicationContext())
+                                        .load(String.valueOf(profilePhotoURL)).into(profilePicIV);
+                                break;
+                        }
+                    }
 
                 }
-
-
-
-//                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.toString())) {
-//                    if(trainerType.equalsIgnoreCase(trainer.toString())&&date.equalsIgnoreCase(dateTime.toString()))
-//                    {
-//                        key=dataSnapshot.getKey();
-//
-//                    }
-//                }
             }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e("Trainer Details", "onCancelled", databaseError.toException());
             }
         });
 

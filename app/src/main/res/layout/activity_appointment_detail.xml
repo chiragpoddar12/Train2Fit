@@ -21,9 +21,10 @@
         android:id="@+id/profilePicIV"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="fitXY"
-
-        android:src="@drawable/fitness1" />
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/blank_profile"
+        />
 
     </android.support.v7.widget.CardView>
 
@@ -140,11 +141,11 @@
         android:layout_gravity="center"/>
 
     <TextView
-        android:id="@+id/location"
+        android:id="@+id/notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_place"
-        android:drawableLeft="@drawable/ic_place"
+        android:drawableStart="@drawable/ic_feedback"
+        android:drawableLeft="@drawable/ic_feedback"
         android:drawablePadding="8dp"
         android:layout_weight="1"
         android:layout_marginStart="10dp"
