@@ -46,7 +46,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     private ImageView profilePicIV;
     FirebaseAuth auth;
     private DatabaseReference mDatabase;
-    private String trainerType,date,note, trainerId;
+    private String trainerType,date,note, trainerId,bookingId;
     Button cnl,reschedule;
     String key;
     private StorageReference mStorage;
@@ -102,6 +102,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         date=intent.getStringExtra("date");
         note=intent.getStringExtra("notes");
         trainerId = intent.getStringExtra("trainerId");
+        bookingId = intent.getStringExtra("bookingId");
         timeTV.setText(date.toString());
         notesTV.setText(note.toString());
         auth=FirebaseAuth.getInstance();
@@ -166,7 +167,23 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         cnl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase.child(key).removeValue();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                Query applesQuery = ref.child("Bookings").child(bookingId.toString());
+
+                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+                            appleSnapshot.getRef().removeValue();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("Cancel button pressed", "onCancelled", databaseError.toException());
+                    }
+                });
+
                 finish();
             }
         });

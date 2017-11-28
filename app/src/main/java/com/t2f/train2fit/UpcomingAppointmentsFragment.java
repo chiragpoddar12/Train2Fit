@@ -87,7 +87,7 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 detailsIntent.putExtra("notes",notes);
                 detailsIntent.putExtra("trainerId",trainerId);
                 detailsIntent.putExtra("status",status);
-                detailsIntent.putExtra("bookingID",bookingId);
+                detailsIntent.putExtra("bookingId",bookingId);
                 flag=true;
 //              detailsIntent.putExtra("notes",notes);
                 startActivity(detailsIntent);
