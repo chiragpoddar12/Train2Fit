@@ -42,6 +42,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -162,7 +163,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
 
 
             mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
-            Button book_appointment_button = (Button) rootView.findViewById(R.id.book_appointment_button);
+            final Button book_appointment_button = (Button) rootView.findViewById(R.id.book_appointment_button);
             book_appointment_button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v)  {
                     //get firebase auth instance
@@ -173,75 +174,54 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
 
                     String userId = user.getUid();
 //                    String userId = user.getUid(); //retrieve from session
-                    String trainerType = ((TextView) rootView.findViewById(R.id.detail_text)).getText().toString().split("You Selected")[1];
+                    final String trainerType = ((TextView) rootView.findViewById(R.id.detail_text)).getText().toString().split("You Selected")[1];
                     String date_time = ((EditText) rootView.findViewById(R.id.appointment_date)).getText().toString();
                     String notes = ((EditText) rootView.findViewById(R.id.appointment_notes)).getText().toString();
-                    Map<String, String> booking = new HashMap();
+                    final Map<String, String> booking = new HashMap();
                     booking.put("trainerType", trainerType);
                     booking.put("dateTime", date_time);
                     booking.put("notes", notes);
                     booking.put("user", userId);
-                    String trainerId = getTrainer(trainerType.trim());
-                    booking.put("trainerId", trainerId);
-                    mDatabase.push().setValue(booking).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mDatabase.getParent().child("Trainers").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onSuccess(@NonNull Void T) {
-                            Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful" , Toast.LENGTH_LONG ).show();
-//                          getActivity().finish();
-                            Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map<String,Object> trainers = (Map<String,Object>) dataSnapshot.getValue();
+                            for (Map.Entry<String, Object> trainer : trainers.entrySet()){
+                                Map trainerData = (Map) trainer.getValue();
+                                System.out.println(trainerData.get("trainerType").toString());
+                                System.out.println(trainerType);
+                                if(trainerType.trim().equals(trainerData.get("trainerType").toString().trim())){
+                                    String trainerId = trainerData.get("trainerId").toString();
+                                    booking.put("trainerId", trainerId);
+                                    break;
+                                }
+                            }
+                            mDatabase.push().setValue(booking).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(@NonNull Void T) {
+                                    Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful" , Toast.LENGTH_LONG ).show();
+        //                          getActivity().finish();
+                                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity().getBaseContext(), "Error : Your Appointment booking is Unsuccessful" , Toast.LENGTH_LONG ).show();
+                                }
+                            });
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
+
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity().getBaseContext(), "Error : Your Appointment booking is Unsuccessful" , Toast.LENGTH_LONG ).show();
+                        public void onCancelled(DatabaseError databaseError) {
+
                         }
                     });
-
                 }
             });
 
             return rootView;
-        }
-
-        public String getTrainer(String trainerType){
-            final String trainerTypef = trainerType;
-            mDatabase.getParent().child("Trainers").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    //get all Trainers of this type in an array
-                    ArrayList<Map.Entry<String, Object>> trainersArray = new ArrayList<Map.Entry<String, Object>>();
-
-                    Map<String, Object> trainers = (Map<String, Object>) dataSnapshot.getValue();
-
-                    for(Map.Entry<String, Object> trainer : trainers.entrySet()){
-
-                        Map<String, String> trainerInfos = (Map<String, String>) trainer.getValue();
-
-                        for(Map.Entry<String, String> trainerInfo : trainerInfos.entrySet())
-                        {
-                            if(trainerInfo.getKey().equals("type") && trainerTypef.equals(trainerInfo.getValue().toString()))
-                            {
-                                trainersArray.add(trainer);
-                            }
-                        }
-                    }
-
-                    //get users location
-                    //get trainers location from DB
-                    //calculate distances
-                    //return trainerId
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            return "01";
         }
     }
 
