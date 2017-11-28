@@ -39,7 +39,7 @@
     <string name="hint_password">Password</string>
     <string name="hint_dob">DOB</string>
     <string name="hint_mobile">Mobile</string>
-    <string name="hint_name">Fullname</string>
+    <string name="hint_name">Full Name</string>
     <string name="hint_address">Address</string>
 
     <string name="btn_login">LOGIN</string>
@@ -58,4 +58,12 @@
     <string name="forgot_password_msg">Enter your email. We will send you a link to reset password !</string>
     <string name="fullName">Full Name</string>
     <string name="upload_image">Upload Image</string>
+
+    <string name="trainer_name">Trainer 1</string>
+    <string name="trainer_type">Yoga Trainer</string>
+    <string name="trainer_email">yogatrainer@train2fit.com</string>
+    <string name="trainer_phone">+353 123456789</string>
+    <string name="trainer_time">24-11-2017 18:50:00</string>
+    <string name="trainer_location">Belfield</string>
+
 </resources>

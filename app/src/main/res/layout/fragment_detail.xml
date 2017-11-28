@@ -43,11 +43,13 @@
         android:inputType="text" />
     <Button
         android:id="@+id/book_appointment_button"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
+        android:textColor="@android:color/white"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="12dp"
+        android:background="@drawable/corner_button"
         android:text="Book Appointment" />
 
 </RelativeLayout>

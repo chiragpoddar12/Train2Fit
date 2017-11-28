@@ -78,11 +78,15 @@
         <activity
             android:name=".SignupActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
 
         <activity
             android:name=".ProfileActivity"
@@ -113,8 +117,11 @@
 
         <activity
             android:name=".AppointmentsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".AppointmentDetailActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity android:name=".AppointmentDetailActivity">
+        </activity>
 
     </application>
 

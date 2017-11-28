@@ -129,7 +129,7 @@ public class SignupActivity extends AppCompatActivity {
                                     Log.i("Testing", "User");
                                     System.out.println("line 2");
                                     String userId = task.getResult().getUser().getUid();
-                                    String display_name = task.getResult().getUser().getDisplayName();
+//                                    String display_name = task.getResult().getUser().getDisplayName();
                                     String fullName = etFullName.getText().toString();
                                     String dob = inputDOB.getText().toString();
                                     String address = inputAddress.getText().toString();

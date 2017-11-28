@@ -97,10 +97,10 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     String phone = (String) map.get("phone");
                     String email = (String) map.get("email");
 
-                    nameTV.setText("Trainer Name: "+fullName);
-                    typeTV.setText("Trainer Type: "+type);
-                    phnTV.setText("Phone: "+phone);
-                    emailTV.setText("Email: "+email);
+                    nameTV.setText(fullName);
+                    typeTV.setText(type);
+                    phnTV.setText(phone);
+                    emailTV.setText(email);
 
 
                 }
