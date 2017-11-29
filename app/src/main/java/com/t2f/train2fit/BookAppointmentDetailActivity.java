@@ -170,6 +170,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
         private EditText appointment_date;
         private EditText appointment_notes;
         DatabaseReference mDatabase;
+        private String bookingId;
         public DetailFragment() {
         }
 
@@ -178,13 +179,20 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
 
             final View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+            bookingId = "";
 
         // The detail Activity called via intent.  Inspect the intent for appointment data.
             Intent intent = getActivity().getIntent();
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
                 String appointmentStr = "You Selected " + intent.getStringExtra(Intent.EXTRA_TEXT);
                 ((TextView) rootView.findViewById(R.id.detail_text)).setText(appointmentStr);
-                }
+                }else  {
+                    String appointmentStr = "You Selected " + intent.getStringExtra("trainerType");
+                    ((TextView) rootView.findViewById(R.id.detail_text)).setText(appointmentStr);
+                    ((TextView) rootView.findViewById(R.id.appointment_date)).setText(intent.getStringExtra("date"));
+                    ((TextView) rootView.findViewById(R.id.appointment_notes)).setText(intent.getStringExtra("notes"));
+                    bookingId = intent.getStringExtra("bookingId");
+              }
 
             DateEdit = (EditText) rootView.findViewById(R.id.appointment_date);
             DateEdit.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +219,9 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
-            DateEdit.setText(day + "/" + (month + 1) + "/" + year + " -" + hour + ":" + minute);
+            if (bookingId.toString() == "") {
+                DateEdit.setText(day + "/" + (month + 1) + "/" + year + " -" + hour + ":" + minute);
+            }
 
 
             mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
@@ -227,8 +237,8 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                     String userId = user.getUid();
 //                    String userId = user.getUid(); //retrieve from session
                     final String trainerType = ((TextView) rootView.findViewById(R.id.detail_text)).getText().toString().split("You Selected")[1];
-                    String date_time = ((EditText) rootView.findViewById(R.id.appointment_date)).getText().toString();
-                    String notes = ((EditText) rootView.findViewById(R.id.appointment_notes)).getText().toString();
+                    final String date_time = ((EditText) rootView.findViewById(R.id.appointment_date)).getText().toString();
+                    final String notes = ((EditText) rootView.findViewById(R.id.appointment_notes)).getText().toString();
                     final Map<String, String> booking = new HashMap();
                     final float distance = 0;
                     booking.put("trainerType", trainerType);
@@ -267,21 +277,34 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                                 }
                             }
                             booking.put("trainerId", trainerId);
-                            mDatabase.push().setValue(booking).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(@NonNull Void T) {
-                                    Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful" , Toast.LENGTH_LONG ).show();
-        //                          getActivity().finish();
-                                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getActivity().getBaseContext(), "Error : Your Appointment booking is Unsuccessful" , Toast.LENGTH_LONG ).show();
-                                }
-                            });
+                            if (bookingId.toString() == "") {
+                                mDatabase.push().setValue(booking).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(@NonNull Void T) {
+                                        Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful" , Toast.LENGTH_LONG ).show();
+            //                          getActivity().finish();
+                                        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getActivity().getBaseContext(), "Error : Your Appointment booking is Unsuccessful" , Toast.LENGTH_LONG ).show();
+                                    }
+                                });
+                            }else {
+                                    try {
+                                        mDatabase.child(bookingId).child("dateTime").setValue(date_time);
+                                        mDatabase.child(bookingId).child("notes").setValue(notes);
+                                        Toast.makeText(getActivity().getBaseContext(), "Your Appointment reschedule was successful", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                            }
                         }
 
                         @Override

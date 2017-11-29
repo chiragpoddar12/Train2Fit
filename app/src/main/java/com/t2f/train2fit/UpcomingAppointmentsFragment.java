@@ -104,6 +104,7 @@ public class UpcomingAppointmentsFragment extends Fragment {
 
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                 bookingId = dataSnapshot.getKey().toString();
+                System.out.println("HERE " + map.get("trainerType"));
                 trainer = (String) map.get("trainerType");
                 dateTime = (String) map.get("dateTime");
                 notes = (String) map.get("notes");
