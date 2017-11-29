@@ -52,11 +52,12 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         if (user != null) {
             userId = user.getUid();//retrieve from session
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+            mDatabase.child("notificationTokens").setValue(refreshedToken);
         }
 
 //        String userId = "sfosniocnoi6868161";
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
-        mDatabase.child("notificationTokens").setValue(refreshedToken);
+
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.

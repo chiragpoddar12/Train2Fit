@@ -129,13 +129,13 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
 
             final View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-
+            bookingId = "";
         // The detail Activity called via intent.  Inspect the intent for appointment data.
             Intent intent = getActivity().getIntent();
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
                 String appointmentStr = "You Selected " + intent.getStringExtra(Intent.EXTRA_TEXT);
                 ((TextView) rootView.findViewById(R.id.detail_text)).setText(appointmentStr);
-                } else if (intent != null && !(intent.getStringExtra("trainerType").isEmpty())) {
+                } else  {
                 String appointmentStr = "You Selected " + intent.getStringExtra("trainerType");
 
                 ((TextView) rootView.findViewById(R.id.detail_text)).setText(appointmentStr);
@@ -143,7 +143,6 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                 ((TextView) rootView.findViewById(R.id.appointment_notes)).setText(intent.getStringExtra("notes"));
                 bookingId = intent.getStringExtra("bookingId");
             }
-            final String date_time = ((EditText) rootView.findViewById(R.id.appointment_date)).getText().toString();
             DateEdit = (EditText) rootView.findViewById(R.id.appointment_date);
             DateEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -169,7 +168,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
-            if (bookingId.isEmpty()) {
+            if (bookingId.toString() == "") {
                 DateEdit.setText(day + "/" + (month + 1) + "/" + year + " -" + hour + ":" + minute);
             }
 
@@ -207,7 +206,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                                     break;
                                 }
                             }
-                            if (bookingId.isEmpty()) {
+                            if (bookingId.toString() == "") {
                             mDatabase.push().setValue(booking).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(@NonNull Void T) {
