@@ -107,6 +107,8 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         status = intent.getStringExtra("status");
         if (status .equals("Completed")) {
             complete.setText("View Feedback");
+            cnl.setVisibility(View.GONE);
+            reschedule.setVisibility(View.GONE);
         }
         timeTV.setText(date.toString());
         notesTV.setText(note.toString());
