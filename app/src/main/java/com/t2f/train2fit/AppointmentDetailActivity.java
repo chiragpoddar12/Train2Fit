@@ -158,23 +158,32 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         reschedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatabase.child(key).removeValue();
-                startActivity(new Intent(AppointmentDetailActivity.this,BookAppointmentActivity.class));
+
+                Intent detailsIntent = new Intent(AppointmentDetailActivity.this,BookAppointmentDetailActivity.class);
+                detailsIntent.putExtra("trainerType",trainerType);
+                detailsIntent.putExtra("date",date);
+                detailsIntent.putExtra("notes",note);
+                detailsIntent.putExtra("trainerId",trainerId);
+                detailsIntent.putExtra("bookingId",bookingId);
+//                flag=true;
+//              detailsIntent.putExtra("notes",notes);
+                startActivity(detailsIntent);
+
+//                startActivity(new Intent(AppointmentDetailActivity.this,BookAppointmentDetailActivity.class));
                 UpcomingAppointmentsFragment.flag=false;
-                finish();
             }
         });
         cnl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                Query applesQuery = ref.child("Bookings").child(bookingId.toString());
+                Query cancelAppointmentQuery = ref.child("Bookings").child(bookingId.toString());
 
-                applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                cancelAppointmentQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
-                            appleSnapshot.getRef().removeValue();
+                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                            snapshot.getRef().removeValue();
                         }
                     }
 

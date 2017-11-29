@@ -30,7 +30,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyFirebaseIIDService";
     public String userId;
-    private FirebaseAuth auth;
+//    private FirebaseAuth auth;
     private DatabaseReference mDatabase;
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -45,12 +45,15 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
         //get firebase auth instance
-        auth = FirebaseAuth.getInstance();
+//        auth = FirebaseAuth.getInstance();
 
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        userId = user.getUid();//retrieve from session
+        if (user != null) {
+            userId = user.getUid();//retrieve from session
+        }
+
 //        String userId = "sfosniocnoi6868161";
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
         mDatabase.child("notificationTokens").setValue(refreshedToken);

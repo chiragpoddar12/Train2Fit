@@ -26,6 +26,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
@@ -118,6 +120,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
         private EditText appointment_date;
         private EditText appointment_notes;
         DatabaseReference mDatabase;
+        private String bookingId;
         public DetailFragment() {
         }
 
@@ -132,8 +135,15 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
                 String appointmentStr = "You Selected " + intent.getStringExtra(Intent.EXTRA_TEXT);
                 ((TextView) rootView.findViewById(R.id.detail_text)).setText(appointmentStr);
-                }
+                } else if (intent != null && !(intent.getStringExtra("trainerType").isEmpty())) {
+                String appointmentStr = "You Selected " + intent.getStringExtra("trainerType");
 
+                ((TextView) rootView.findViewById(R.id.detail_text)).setText(appointmentStr);
+                ((TextView) rootView.findViewById(R.id.appointment_date)).setText(intent.getStringExtra("date"));
+                ((TextView) rootView.findViewById(R.id.appointment_notes)).setText(intent.getStringExtra("notes"));
+                bookingId = intent.getStringExtra("bookingId");
+            }
+            final String date_time = ((EditText) rootView.findViewById(R.id.appointment_date)).getText().toString();
             DateEdit = (EditText) rootView.findViewById(R.id.appointment_date);
             DateEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -159,8 +169,9 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
-            DateEdit.setText(day + "/" + (month + 1) + "/" + year + " -" + hour + ":" + minute);
-
+            if (bookingId.isEmpty()) {
+                DateEdit.setText(day + "/" + (month + 1) + "/" + year + " -" + hour + ":" + minute);
+            }
 
             mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
             final Button book_appointment_button = (Button) rootView.findViewById(R.id.book_appointment_button);
@@ -175,8 +186,8 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                     String userId = user.getUid();
 //                    String userId = user.getUid(); //retrieve from session
                     final String trainerType = ((TextView) rootView.findViewById(R.id.detail_text)).getText().toString().split("You Selected")[1];
-                    String date_time = ((EditText) rootView.findViewById(R.id.appointment_date)).getText().toString();
-                    String notes = ((EditText) rootView.findViewById(R.id.appointment_notes)).getText().toString();
+                    final String date_time = ((EditText) rootView.findViewById(R.id.appointment_date)).getText().toString();
+                    final String notes = ((EditText) rootView.findViewById(R.id.appointment_notes)).getText().toString();
                     final Map<String, String> booking = new HashMap();
                     booking.put("trainerType", trainerType);
                     booking.put("dateTime", date_time);
@@ -185,22 +196,23 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                     mDatabase.getParent().child("Trainers").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Map<String,Object> trainers = (Map<String,Object>) dataSnapshot.getValue();
-                            for (Map.Entry<String, Object> trainer : trainers.entrySet()){
+                            Map<String, Object> trainers = (Map<String, Object>) dataSnapshot.getValue();
+                            for (Map.Entry<String, Object> trainer : trainers.entrySet()) {
                                 Map trainerData = (Map) trainer.getValue();
                                 System.out.println(trainerData.get("trainerType").toString());
                                 System.out.println(trainerType);
-                                if(trainerType.trim().equals(trainerData.get("trainerType").toString().trim())){
+                                if (trainerType.trim().equals(trainerData.get("trainerType").toString().trim())) {
                                     String trainerId = trainerData.get("trainerId").toString();
                                     booking.put("trainerId", trainerId);
                                     break;
                                 }
                             }
+                            if (bookingId.isEmpty()) {
                             mDatabase.push().setValue(booking).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(@NonNull Void T) {
-                                    Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful" , Toast.LENGTH_LONG ).show();
-        //                          getActivity().finish();
+                                    Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful", Toast.LENGTH_LONG).show();
+                                    //                          getActivity().finish();
                                     Intent intent = new Intent(getActivity(), ProfileActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
@@ -208,9 +220,23 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getActivity().getBaseContext(), "Error : Your Appointment booking is Unsuccessful" , Toast.LENGTH_LONG ).show();
+                                    Toast.makeText(getActivity().getBaseContext(), "Error : Your Appointment booking is Unsuccessful", Toast.LENGTH_LONG).show();
                                 }
                             });
+                        } else {
+                                try {
+                                    mDatabase.child(bookingId).child("dateTime").setValue(date_time);
+                                    mDatabase.child(bookingId).child("notes").setValue(notes);
+
+                                    Toast.makeText(getActivity().getBaseContext(), "Your Appointment reschedule was successful", Toast.LENGTH_LONG).show();
+                                    //                          getActivity().finish();
+                                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
 
                         @Override
