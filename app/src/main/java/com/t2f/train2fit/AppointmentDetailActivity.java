@@ -46,8 +46,8 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     private ImageView profilePicIV;
     FirebaseAuth auth;
     private DatabaseReference mDatabase;
-    private String trainerType,date,note, trainerId,bookingId;
-    Button cnl,reschedule;
+    private String trainerType,date,note, trainerId,bookingId,status;
+    Button cnl,complete,reschedule;
     String key;
     private StorageReference mStorage;
     public String userId;
@@ -64,7 +64,8 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         phnTV=(TextView)findViewById(R.id.phnTV);
         timeTV=(TextView)findViewById(R.id.timeTV);
         notesTV=(TextView)findViewById(R.id.notes);
-        cnl=(Button)findViewById(R.id.cnclBooking) ;
+        cnl=(Button)findViewById(R.id.cnclBooking);
+        complete=(Button)findViewById(R.id.completeBooking);
         reschedule=(Button)findViewById(R.id.rescheduleBooking) ;
         typeTV = (TextView) findViewById(R.id.trainerType);
         profilePicIV = (ImageView) findViewById(R.id.profilePicIV);
@@ -103,6 +104,10 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         note=intent.getStringExtra("notes");
         trainerId = intent.getStringExtra("trainerId");
         bookingId = intent.getStringExtra("bookingId");
+        status = intent.getStringExtra("status");
+        if (status .equals("Completed")) {
+            complete.setText("View Feedback");
+        }
         timeTV.setText(date.toString());
         notesTV.setText(note.toString());
         auth=FirebaseAuth.getInstance();
@@ -166,7 +171,6 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                 detailsIntent.putExtra("trainerId",trainerId);
                 detailsIntent.putExtra("bookingId",bookingId);
 //                flag=true;
-//              detailsIntent.putExtra("notes",notes);
                 startActivity(detailsIntent);
 
 //                startActivity(new Intent(AppointmentDetailActivity.this,BookAppointmentDetailActivity.class));
@@ -197,10 +201,25 @@ public class AppointmentDetailActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
+        complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (status.equals("Completed")) {
+                    Intent feedbackActivityIntent = new Intent(AppointmentDetailActivity.this, feedbackActivity.class);
+                    feedbackActivityIntent.putExtra("bookingId", bookingId);
+                    startActivity(feedbackActivityIntent);
+                } else {
+                    try {
+                        FirebaseDatabase.getInstance().getReference().child("Bookings").child(bookingId).child("status").setValue("Completed");
+                        Toast.makeText(getApplicationContext(), "Your Appointment was completed successful", Toast.LENGTH_LONG).show();
+                        Intent feedbackActivityIntent = new Intent(AppointmentDetailActivity.this, feedbackActivity.class);
+                        feedbackActivityIntent.putExtra("bookingId", bookingId);
+                        startActivity(feedbackActivityIntent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 }

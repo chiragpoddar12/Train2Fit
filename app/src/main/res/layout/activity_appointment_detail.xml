@@ -168,7 +168,17 @@
             android:background="#212F3D"
             android:layout_weight="1"
             android:textColor="@android:color/white"
-            android:text="Cancel" />
+            android:text="Cancel \nBooking" />
+
+        <Button
+            android:id="@+id/completeBooking"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:background="#212F3D"
+            android:text="Complete Booking" />
 
         <Button
             android:id="@+id/rescheduleBooking"
@@ -178,7 +188,8 @@
             android:textColor="@android:color/white"
             android:layout_weight="1"
             android:background="#212F3D"
-            android:text="Reschedule" />
+            android:text="Reschedule Booking" />
+
 
     </LinearLayout>
 </LinearLayout>

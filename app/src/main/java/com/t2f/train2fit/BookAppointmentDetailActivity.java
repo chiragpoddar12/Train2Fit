@@ -245,7 +245,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                     booking.put("dateTime", date_time);
                     booking.put("notes", notes);
                     booking.put("user", userId);
-
+                    booking.put("status","Upcoming");
 
                     mDatabase.getParent().child("Trainers").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

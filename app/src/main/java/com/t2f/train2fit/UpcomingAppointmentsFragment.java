@@ -80,7 +80,8 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 notes = (String) map.get("notes");
                 user = (String) map.get("user");
                 trainerId = (String) map.get("trainerId");
-                status = getStatus(dateTime.substring(0,10));
+//                status = getStatus(dateTime.substring(0,10));
+                status = (String) map.get("status");
                 Intent detailsIntent = new Intent(getContext(),AppointmentDetailActivity.class);
                 detailsIntent.putExtra("trainerType",trainer);
                 detailsIntent.putExtra("date",dateTime);
@@ -110,8 +111,8 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 notes = (String) map.get("notes");
                 user = (String) map.get("user");
                 trainerId = (String) map.get("trainerId");
-                status = getStatus(dateTime.substring(0,10));
-
+//                status = getStatus(dateTime.substring(0,10));
+                status = (String) map.get("status");
                 if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.toString())) {
 
                     String trainerString = "Booked " + trainer.toString() + "\nDate: " + dateTime.toString() + "\nNotes: " + notes.toString() + "\nStatus: " + status;
