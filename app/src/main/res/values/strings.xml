@@ -11,7 +11,7 @@
 
     <string name="action_type_of_trainer">Select Type of Trainer</string>
     <string name="title_appointment_detail">Appointment Detail</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">About</string>
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_feedback">Feedback</string>
     <string name="seleted_option">Seleted Option</string>
@@ -21,8 +21,6 @@
     <string name="pick_date">Pick Date</string>
     <string name="pick_time">Pick Time</string>
 
-
-    <!-- Strings related to login -->
     <string name="facebook_app_id">131578134275752</string>
     <string name="fb_login_protocol_scheme">fb131578134275752</string>
     <string name="action_sign_in_short">Register</string>
@@ -35,12 +33,13 @@
     <string name="remove_user">Remove user</string>
     <string name="new_pass">New Password</string>
     <string name="title_activity_profile">Firebase</string>
-    <string name="hint_email">Email</string>
+    <string name="hint_email">Username</string>
     <string name="hint_password">Password</string>
     <string name="hint_dob">DOB</string>
     <string name="hint_mobile">Mobile</string>
     <string name="hint_name">Full Name</string>
     <string name="hint_address">Address</string>
+    <string name="check_option">Remember Username and Password</string>
 
     <string name="btn_login">LOGIN</string>
     <string name="btn_link_to_register">Register here if not a member !</string>
@@ -66,5 +65,20 @@
     <string name="trainer_time">24-11-2017 18:50:00</string>
     <string name="appointment_notes">No notes available for this visit</string>
     <string name="trainer_location">Belfield</string>
+
+
+
+    <string name="about_title"> About Train2Fit App</string>
+    <string name="about_app">
+        Our Application aims at connecting different
+        users to have access to multiple types of treatment
+        from home. We connect different aspiring medical
+        trainers to freelance their services while gaining
+        reputation based on the user feedback for their service.
+    </string>
+    <string name="about_footer">
+        Version : 1.0 "\n\n"
+        "\u00a9" All Rights Reserved
+    </string>
 
 </resources>

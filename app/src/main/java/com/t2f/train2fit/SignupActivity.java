@@ -1,6 +1,8 @@
 package com.t2f.train2fit;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -76,6 +78,7 @@ public class SignupActivity extends AppCompatActivity {
                 String mobile = inputMobile.getText().toString().trim();
                 String address = inputAddress.getText().toString().trim();
 
+
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
                     return;
@@ -135,6 +138,13 @@ public class SignupActivity extends AppCompatActivity {
                                     String address = inputAddress.getText().toString();
                                     String mobile = inputMobile.getText().toString();
                                     String email = inputEmail.getText().toString();
+
+                                    SharedPreferences sharedPref = getSharedPreferences("UserSignUp", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putString("username",inputEmail.getText().toString());
+                                    editor.putString("password",inputPassword.getText().toString());
+                                    editor.apply();
+
                                     Map<String, Object> userMap = new HashMap<String, Object>();
                                     userMap.put("full_name", fullName);
 //                                    userMap.put("userId", userId);
@@ -151,7 +161,7 @@ public class SignupActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(@NonNull Void T) {
                                             Toast.makeText(getApplicationContext(), "Success: User registration is successful" , Toast.LENGTH_LONG ).show();
-                                            startActivity(new Intent(SignupActivity.this, BookAppointmentActivity.class));
+                                            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                                             finish();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {

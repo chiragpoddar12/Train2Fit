@@ -397,6 +397,23 @@ public class ProfileActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastPress > 5000) {
+            backpressToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_LONG);
+            backpressToast.show();
+            lastPress = currentTime;
+
+        } else {
+            if (backpressToast != null) backpressToast.cancel();
+            super.onBackPressed();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
+
     }
 
     @Override
@@ -415,7 +432,7 @@ public class ProfileActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            startActivity(new Intent(ProfileActivity.this, AboutActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
