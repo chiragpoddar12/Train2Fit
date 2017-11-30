@@ -64,6 +64,7 @@
     <string name="trainer_email">yogatrainer@train2fit.com</string>
     <string name="trainer_phone">+353 123456789</string>
     <string name="trainer_time">24-11-2017 18:50:00</string>
+    <string name="appointment_notes">No notes available for this visit</string>
     <string name="trainer_location">Belfield</string>
 
 </resources>
