@@ -282,8 +282,8 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(@NonNull Void T) {
                                         Toast.makeText(getActivity().getBaseContext(), "Your Appointment booking is successful" , Toast.LENGTH_LONG ).show();
-            //                          getActivity().finish();
-                                        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                                        Intent intent = new Intent(getActivity(), BookingActivity.class);
+                                        getActivity().finish();
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(intent);
                                     }
@@ -298,7 +298,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
                                         mDatabase.child(bookingId).child("dateTime").setValue(date_time);
                                         mDatabase.child(bookingId).child("notes").setValue(notes);
                                         Toast.makeText(getActivity().getBaseContext(), "Your Appointment reschedule was successful", Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                                        Intent intent = new Intent(getActivity(), BookingActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(intent);
                                     } catch (Exception e) {

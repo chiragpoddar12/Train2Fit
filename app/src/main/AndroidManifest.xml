@@ -57,6 +57,15 @@
                 android:value="com.t2f.train2fit.ProfileActivity" />
         </activity>
         <activity
+            android:name=".AppointmentDetailActivity"
+            android:label="Bookings Detail"
+            android:parentActivityName=".BookingActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.t2f.train2fit.ProfileActivity" />
+        </activity>
+
+        <activity
             android:name=".BookAppointmentActivity"
             android:label="@string/action_type_of_trainer"
             android:parentActivityName=".ProfileActivity">
@@ -114,8 +123,8 @@
         </activity>
         <activity
             android:name=".AppointmentsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".AppointmentDetailActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name=".AboutActivity"></activity>
     </application>
 

@@ -82,7 +82,7 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 trainerId = (String) map.get("trainerId");
 //                status = getStatus(dateTime.substring(0,10));
                 status = (String) map.get("status");
-                Intent detailsIntent = new Intent(getContext(),AppointmentDetailActivity.class);
+                Intent detailsIntent = new Intent(getActivity(),AppointmentDetailActivity.class);
                 detailsIntent.putExtra("trainerType",trainer);
                 detailsIntent.putExtra("date",dateTime);
                 detailsIntent.putExtra("notes",notes);
