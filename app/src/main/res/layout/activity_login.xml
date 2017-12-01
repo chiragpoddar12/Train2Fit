@@ -7,17 +7,10 @@
     android:fitsSystemWindows="true"
     tools:context="com.t2f.train2fit.LoginActivity">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center|bottom"
-        android:layout_marginBottom="20dp"
-        android:visibility="gone" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin">
@@ -43,7 +36,7 @@
 
             <EditText
                 android:id="@+id/password"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:layout_marginBottom="10dp"
@@ -104,8 +97,6 @@
             android:layout_height="1dp"
             android:background="#c0c0c0"
             android:layout_gravity="center"/>
-
-
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
