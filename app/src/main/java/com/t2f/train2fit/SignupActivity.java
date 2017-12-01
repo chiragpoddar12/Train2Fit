@@ -13,7 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,8 +30,7 @@ import java.util.Map;
 public class SignupActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword,inputDOB, inputMobile, inputAddress;
-    private Button btnSignIn, btnSignUp, btnResetPassword;
-    private ProgressBar progressBar;
+    private Button SignIn, SignUp, Reset;
     private DatabaseReference mDatabase;
     private FirebaseAuth auth;
 
@@ -50,25 +48,24 @@ public class SignupActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        btnSignIn = (Button) findViewById(R.id.sign_in_button);
-        btnSignUp = (Button) findViewById(R.id.sign_up_button);
+        SignIn = (Button) findViewById(R.id.sign_in_button);
+        SignUp = (Button) findViewById(R.id.sign_up_button);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         inputDOB = (EditText) findViewById(R.id.dob);
         inputMobile = (EditText)findViewById(R.id.mobile);
         inputAddress = (EditText)findViewById(R.id.address);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        btnResetPassword = (Button) findViewById(R.id.btn_reset_password);
+        Reset = (Button) findViewById(R.id.btn_reset_password);
         final EditText etFullName = (EditText) findViewById(R.id.fullName);
 
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
+        SignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
+        SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -109,18 +106,12 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
-                //create user
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 System.out.println("HELLO");
                                 Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
@@ -147,15 +138,11 @@ public class SignupActivity extends AppCompatActivity {
 
                                     Map<String, Object> userMap = new HashMap<String, Object>();
                                     userMap.put("full_name", fullName);
-//                                    userMap.put("userId", userId);
                                     userMap.put("dob", dob);
                                     userMap.put("address", address);
                                     userMap.put("mobile", mobile);
                                     userMap.put("email", email);
 
-//                                    System.out.println(userMap);
-//                                    User user = new User(userId, display_name, first_name, last_name, dob, address);
-//                                    mDatabase.push().setValue(userMap).
                                     mDatabase.child(userId).setValue(userMap)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -185,6 +172,5 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.GONE);
     }
 }
