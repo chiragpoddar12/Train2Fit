@@ -209,7 +209,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                 if (status.equals("Completed")) {
                     Intent feedbackActivityIntent = new Intent(AppointmentDetailActivity.this, feedbackActivity.class);
                     feedbackActivityIntent.putExtra("bookingId", bookingId);
-                    feedbackActivityIntent.putExtra("stutus", status);
+                    feedbackActivityIntent.putExtra("status", status);
                     startActivity(feedbackActivityIntent);
                 } else {
                     try {
@@ -217,7 +217,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Your Appointment was completed successful", Toast.LENGTH_LONG).show();
                         Intent feedbackActivityIntent = new Intent(AppointmentDetailActivity.this, feedbackActivity.class);
                         feedbackActivityIntent.putExtra("bookingId", bookingId);
-                        feedbackActivityIntent.putExtra("stutus", status);
+                        feedbackActivityIntent.putExtra("status", status);
                         startActivity(feedbackActivityIntent);
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -26,11 +26,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
+
+import java.util.Map;
 
 public class feedbackActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,9 +94,37 @@ public class feedbackActivity extends AppCompatActivity
             }
         });
         final String bookingId = getIntent().getExtras().getString("bookingId");
+        final String status = getIntent().getExtras().getString("status");
+
         bSendFeedback = (Button) findViewById(R.id.bSendFeedback);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         etComments = (EditText) findViewById(R.id.editTextComments);
+
+        if (status .equals("Completed")) {
+
+            DatabaseReference ref = mDatabase.child(bookingId).child("feedback");
+
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() != null) {
+                        Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                        etComments.setText((String) map.get("comment"));
+                        ratingBar.setRating(Float.parseFloat((String) map.get("rating")));
+                        etComments.setFocusable(false);
+                        ratingBar.setEnabled(false);
+                        bSendFeedback.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
         bSendFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
