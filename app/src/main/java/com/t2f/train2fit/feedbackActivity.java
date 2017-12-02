@@ -35,6 +35,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 public class feedbackActivity extends AppCompatActivity
@@ -77,7 +79,7 @@ public class feedbackActivity extends AppCompatActivity
         String userId = user.getUid();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView =  navigationView.getHeaderView(0);
-        ivImageView = (ImageView)hView.findViewById(R.id.imageView);
+
         mStorage = FirebaseStorage.getInstance().getReference();
         Task<Uri> task = mStorage.child("profilePhotos").child(userId).getDownloadUrl();
         task.addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -95,10 +97,20 @@ public class feedbackActivity extends AppCompatActivity
         });
         final String bookingId = getIntent().getExtras().getString("bookingId");
         final String status = getIntent().getExtras().getString("status");
+        final String profilePhotoString = getIntent().getExtras().getString("profilePhotoURL");
+        URL profilePhotoURL = null;
+        try {
+            profilePhotoURL = new URL(profilePhotoString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         bSendFeedback = (Button) findViewById(R.id.bSendFeedback);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         etComments = (EditText) findViewById(R.id.editTextComments);
+        ivImageView = (ImageView) findViewById(R.id.imageViewTrainer);
+        Picasso.with(getApplicationContext())
+                .load(String.valueOf(profilePhotoURL)).into(ivImageView);
 
         if (status .equals("Completed")) {
 

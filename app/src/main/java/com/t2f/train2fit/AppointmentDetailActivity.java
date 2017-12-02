@@ -51,7 +51,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
     String key;
     private StorageReference mStorage;
     public String userId;
-
+    public URL profilePhotoURL;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +141,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                                 emailTV.setText(userInfo.getValue().toString());
                                 break;
                             case "profilePhoto":
-                                URL profilePhotoURL = null;
+                                profilePhotoURL = null;
                                 try {
                                     profilePhotoURL = new URL(userInfo.getValue().toString());
                                 } catch (MalformedURLException e) {
@@ -210,6 +210,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                     Intent feedbackActivityIntent = new Intent(AppointmentDetailActivity.this, feedbackActivity.class);
                     feedbackActivityIntent.putExtra("bookingId", bookingId);
                     feedbackActivityIntent.putExtra("status", status);
+                    feedbackActivityIntent.putExtra("profilePhotoURL", profilePhotoURL.toString());
                     startActivity(feedbackActivityIntent);
                 } else {
                     try {
@@ -218,6 +219,7 @@ public class AppointmentDetailActivity extends AppCompatActivity {
                         Intent feedbackActivityIntent = new Intent(AppointmentDetailActivity.this, feedbackActivity.class);
                         feedbackActivityIntent.putExtra("bookingId", bookingId);
                         feedbackActivityIntent.putExtra("status", status);
+                        feedbackActivityIntent.putExtra("profilePhotoURL", profilePhotoURL.toString());
                         startActivity(feedbackActivityIntent);
                     } catch (Exception e) {
                         e.printStackTrace();
