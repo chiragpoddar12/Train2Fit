@@ -45,7 +45,6 @@ public class SignupActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_signup);
 
-        //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
         SignIn = (Button) findViewById(R.id.sign_in_button);
@@ -118,12 +117,10 @@ public class SignupActivity extends AppCompatActivity {
                                 } else {
                                     Log.i("Testing", "User");
                                     System.out.println("line 1");
-                                    //Firebase DB Reference
                                     mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
                                     Log.i("Testing", "User");
                                     System.out.println("line 2");
                                     String userId = task.getResult().getUser().getUid();
-//                                    String display_name = task.getResult().getUser().getDisplayName();
                                     String fullName = etFullName.getText().toString();
                                     String dob = inputDOB.getText().toString();
                                     String address = inputAddress.getText().toString();
@@ -147,14 +144,14 @@ public class SignupActivity extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(@NonNull Void T) {
-                                            Toast.makeText(getApplicationContext(), "Success: User registration is successful" , Toast.LENGTH_LONG ).show();
+                                            Toast.makeText(getApplicationContext(), "Success: User Registration is Successful" , Toast.LENGTH_LONG ).show();
                                             startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                                             finish();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getApplicationContext(), "Error : User registration is Unsuccessful" , Toast.LENGTH_LONG ).show();
+                                            Toast.makeText(getApplicationContext(), "Error : User Registration is Unsuccessful" , Toast.LENGTH_LONG ).show();
                                         }
                                     });
 

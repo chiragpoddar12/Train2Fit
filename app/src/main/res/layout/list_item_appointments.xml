@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:maxHeight="40dp"
+    android:background="#23B797"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
     android:id="@+id/list_item_appointments_textview">

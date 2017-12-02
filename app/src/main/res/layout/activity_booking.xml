@@ -5,6 +5,7 @@
     android:name="com.t2f.train2fit.UpcomingAppointmentsFragment"
     tools:layout="@layout/fragment_upcoming_appointments"
     android:layout_width="match_parent"
+    android:background="#23B797"
     android:layout_height="match_parent"
 
     />
