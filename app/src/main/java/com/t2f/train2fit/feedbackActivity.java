@@ -88,13 +88,13 @@ public class feedbackActivity extends AppCompatActivity
 
             }
         });
+        final String bookingId = getIntent().getExtras().getString("bookingId");
         bSendFeedback = (Button) findViewById(R.id.bSendFeedback);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         etComments = (EditText) findViewById(R.id.editTextComments);
         bSendFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String bookingId = "-KyzqBidVQho8maHctdQ";
                 String comments = etComments.getText().toString();
                 mDatabase.child(bookingId).child("feedback").child("comment").setValue(comments);
                 String rating = ""+ratingBar.getRating();
