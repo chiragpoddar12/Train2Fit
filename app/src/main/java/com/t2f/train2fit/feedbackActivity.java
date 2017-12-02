@@ -145,9 +145,14 @@ public class feedbackActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            Intent bookingIntent=new Intent(feedbackActivity.this, BookingActivity.class);
+            startActivity(bookingIntent);
         } else if (id == R.id.showProfilePage) {
             Intent profileActivityIntent=new Intent(feedbackActivity.this, ProfileActivity.class);
             startActivity(profileActivityIntent);
+        } else if (id == R.id.nav_book_appointment) {
+            Intent bookAppointmentActivityIntent=new Intent(feedbackActivity.this, BookAppointmentActivity.class);
+            startActivity(bookAppointmentActivityIntent);
         }else if(id== R.id.signOutItem){
             signOut();
         }
