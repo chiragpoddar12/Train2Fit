@@ -68,6 +68,7 @@ public class BookAppointmentFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Trainer Type");
         listView = (ListView) rootView.findViewById(R.id.listview_appointments);
 
+
         mBookAppointmentAdapter =
                 new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)

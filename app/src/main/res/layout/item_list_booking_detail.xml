@@ -2,11 +2,13 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxHeight="40dp"
-    android:textAlignment="center"
+    android:maxHeight="500dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:padding="10dp"
     android:background="#23B797"
     android:textColor="@android:color/white"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
-    android:id="@+id/list_item_appointments_textview">
+    android:id="@+id/list_item_booking_detail">
 </TextView>

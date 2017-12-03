@@ -12,18 +12,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.StreamDownloadTask;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -54,15 +53,13 @@ public class UpcomingAppointmentsFragment extends Fragment {
         listView = (ListView) v.findViewById(R.id.lvupcomingAppointments);
 
 
-
-
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Bookings");
 
         mBookAppointmentAdapter =
                 new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)
-                        R.layout.list_item_appointments, // The name of the layout ID.
-                        R.id.list_item_appointments_textview, // The ID of the textview to populate.
+                        R.layout.item_list_booking_detail, // The name of the layout ID.
+                        R.id.list_item_booking_detail, // The ID of the textview to populate.
                         UpcomingAppointmentList);
 
         populateList();
@@ -75,7 +72,7 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 DataSnapshot dataSnapshot = assignedTrainerList.get(position);
                 bookingId = dataSnapshot.getKey().toString();
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                trainer = (String) map.get("trainerType");
+                trainer = (String) map.get("trainerType") ;
                 dateTime = (String) map.get("dateTime");
                 notes = (String) map.get("notes");
                 user = (String) map.get("user");
@@ -115,7 +112,24 @@ public class UpcomingAppointmentsFragment extends Fragment {
                 status = (String) map.get("status");
                 if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(user.toString())) {
 
-                    String trainerString = "Booked " + trainer.toString() + "\nDate: " + dateTime.toString() + "\nNotes: " + notes.toString() + "\nStatus: " + status;
+                    String dTime = dateTime.toString();
+                    if(dTime != null && !dTime.isEmpty()){
+
+                        //Date conversion to display Release Date in "dd MMM yyyy" format
+                        SimpleDateFormat rel = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ENGLISH);
+                        Date date = null;
+                        try {
+                            date = rel.parse(dTime);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        SimpleDateFormat fmtOut = new SimpleDateFormat("dd MMM yyyy HH:mm",Locale.ENGLISH);
+                        dTime = fmtOut.format(date);
+
+                    }
+
+                    String trainerString = "Trainer Type \n".toUpperCase() + trainer.toString() + "\n\nAppointment Date \n".toUpperCase() + dTime + "\n\nAdditional Notes \n".toUpperCase() + notes.toString() + "\n\nAppointment Status \n".toUpperCase() + status;
                     UpcomingAppointmentList.add(trainerString);
                     assignedTrainerList.add(dataSnapshot);
                     mKeys.add(dataSnapshot.getKey());

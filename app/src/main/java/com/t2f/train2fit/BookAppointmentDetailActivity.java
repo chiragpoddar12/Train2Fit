@@ -20,7 +20,6 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -33,7 +32,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,7 +48,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,14 +56,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 public class BookAppointmentDetailActivity extends AppCompatActivity {
 
@@ -81,7 +75,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
     public LocationManager lm;
     public LocationListener locationListener;
     public static Location location;
-    static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.US);
+    static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.ENGLISH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,7 +214,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
             int minute = c.get(Calendar.MINUTE);
 
             if (bookingId.toString() == "") {
-                DateEdit.setText(day + "/" + (month + 1) + "/" + year + " -" + hour + ":" + minute);
+                DateEdit.setText(day + "-" + (month + 1) + "-" + year + " " + hour + ":" + minute);
             }
 
 
@@ -338,7 +332,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
-            DateEdit.setText(day + "/" + (month + 1) + "/" + year);
+            DateEdit.setText(day + "-" + (month + 1) + "-" + year);
         }
     }
 
@@ -361,7 +355,7 @@ public class BookAppointmentDetailActivity extends AppCompatActivity {
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             // Do something with the time chosen by the user
-            DateEdit.setText(DateEdit.getText() + " - " + hourOfDay + ":" + minute);
+            DateEdit.setText(DateEdit.getText() + " " + hourOfDay + ":" + minute);
         }
     }
 
