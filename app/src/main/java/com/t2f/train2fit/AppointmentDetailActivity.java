@@ -2,11 +2,9 @@ package com.t2f.train2fit;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,31 +13,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-
-import static android.R.attr.width;
-import static com.t2f.train2fit.R.attr.height;
-import static com.t2f.train2fit.R.id.imageView;
 
 public class AppointmentDetailActivity extends AppCompatActivity {
     TextView nameTV, emailTV,phnTV, timeTV,notesTV, typeTV;
@@ -61,7 +48,9 @@ public class AppointmentDetailActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(intent.getStringExtra("TYPE"));
         nameTV=(TextView)findViewById(R.id.trainerNam);
         emailTV=(TextView)findViewById(R.id.emailTV);
+        emailTV.setPaintFlags(emailTV.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         phnTV=(TextView)findViewById(R.id.phnTV);
+        phnTV.setPaintFlags(phnTV.getPaintFlags()|Paint.UNDERLINE_TEXT_FLAG);
         timeTV=(TextView)findViewById(R.id.timeTV);
         notesTV=(TextView)findViewById(R.id.notes);
         cnl=(Button)findViewById(R.id.cnclBooking);
